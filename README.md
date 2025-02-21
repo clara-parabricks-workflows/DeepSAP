@@ -1,36 +1,19 @@
 # DeepSAP
 
-DeepSAP is a Transformer-based tool designed to improve splice junction detection in RNA-seq data. By default, it utilizes the highly sensitive GSNAP TGGA aligner for FASTQ inputs. Alternatively, it can process pre-aligned BAM files directly.
+DeepSAP is a Transformer-based tool designed to improve splice junction detection in RNA-seq data. By default, it utilizes the highly sensitive GSNAP TGGA aligner for FASTQ inputs. Alternatively, it can process pre-aligned BAM files directly. <br>
 
+We evaluated the performance of **DeepSAP** in our article titled *DeepSAP: A Novel Approach to Improve RNA-Seq Alignment Through Integration of Transcriptome Guidance and Transformer-Based Splice Junction Scoring*. In our benchmark, **DeepSAP**, powered by **GSNAP TGGA** and the **DNABERT MS150 transformer model**, demonstrated outstanding performance. It consistently achieved the best results across all evaluated metrics using Baruzzo et al. datasets.
+
+<img src="paper_supplementals/Figure_3_benchmarking_data_results/All/Baruzzo_spirder_recallsVsprecision.png" width="1000">
+
+For additional resources, including data, detailed analyses, and other supplementary materials related to the **DeepSAP** paper, please refer to the **paper_supplementals/README.md** file in this repository. 
 
 ## Table of Contents
-- [Benchmarking](#benchmarking)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Command-line Arguments](#command-line-arguments)
 - [Citation](#Citation)
-
-## Benchmarking: 
-We evaluated the performance of **DeepSAP** in our article titled ["DeepSAP: A Novel Approach to Improve RNA-Seq Alignment Through Integration of Transcriptome Guidance and Transformer-Based Splice Junction Scoring"](link_to_article). The evaluation was performed using the **Baruzzo et al.** (\cite{baruzzo2017simulation}) simulated RNA-seq dataset, which is a widely recognized benchmark for alignment tools.
-
-In our benchmark, **DeepSAP**, powered by **GSNAP TGGA** and the **DNABERT MS150 transformer model**, demonstrated outstanding performance. It consistently achieved the best results across all evaluated metrics.
-
-<img src="paper_supplementals/Figure_3_benchmarking_data_results/All/Baruzzo_spirder_recallsVsprecision.png" width="1000">
-
-## Supplementary Material
-
-For additional resources, including data, detailed analyses, and other supplementary materials related to the **DeepSAP** paper, please refer to the **paper_supplementals** folder in this repository. The folder contains various documents, including:
-
-- **PDFs**
-- **Excel sheets**
-- **Figures (PNG, SVG)**
-- Additional supporting data
-
-A detailed README file is included in the **paper_supplementals** directory to guide you through the materials and provide context on each item.
-
-You can access the supplementary material [here](paper_supplementals/).
-
 
 ## Requirements
 
