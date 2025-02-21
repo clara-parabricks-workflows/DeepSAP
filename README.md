@@ -1,0 +1,101 @@
+# DeepSAP
+
+DeepSAP is a Transformer-based tool designed to improve splice junction detection in RNA-seq data. By default, it utilizes the highly sensitive GSNAP TGGA aligner for FASTQ inputs. Alternatively, it can process pre-aligned BAM files directly.
+
+
+<img src="paper_supplementals/Figure_3_benchmarking_data_results/All/Baruzzo_spirder_recallsVsprecision.png" width="1000">
+
+
+## Table of Contents
+- [Benchmarking](#benchmarking)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Command-line Arguments](#command-line-arguments)
+- [Citation](#Citation)
+
+## Requirements
+
+- Docker with GPU support
+- Input sorted alignment file in BAM/SAM or RNA-seq reads in FASTQ format
+- Reference file in FASTA format
+- Annotaion file in GTF format
+
+## Installation
+
+To run DeepSAP, you need Docker with GPU support. Ensure that the DeepSAP Docker image `deepsap:v0.0.1` is available locally.
+
+## Usage
+DeepSAP comes with a sample dataset located in the test folder to help users get started. This dataset includes:
+
+- A pre-aligned BAM file for short-read RNA-seq data.
+- Paired-end FASTQ files for alignment.
+- Malaria reference genome in FASTA format.
+- Malaria annotation file in GTF format.
+
+You can use this dataset to test DeepSAP's functionality with minimal setup. Update the paths in the provided example commands to point to the files in the test folder.
+
+1- Running DeepSAP with short-read RNA-seq FASTQ files
+
+```bash
+docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm \
+    --volume $(pwd)/test:/workdir                               \
+    --volume $(pwd)/test/outputdir:/outputdir                   \
+    deepsap:v0.0.1                                              \
+    --out /outputdir/                                           \
+    --prefix test_run                                           \
+    --mate_1 /workdir/short_read_pe_dataset/reads_1.fastq       \
+    --mate_2 /workdir/short_read_pe_dataset/reads_2.fastq       \
+    --fasta /workdir/short_read_pe_dataset/malaria_genome.fa    \
+    --gtf /workdir/short_read_pe_dataset/malaria_annotation.gtf
+```
+
+2- Running DeepSAP with short-read RNA-seq FASTQ files and GSNAP index.
+
+```bash
+docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm \
+    --volume $(pwd)/test:/workdir                               \
+    --volume $(pwd)/test/outputdir:/outputdir                   \
+    deepsap:v0.0.1                                              \
+    --out /outputdir/                                           \
+    --prefix test_run                                           \
+    --mate_1 /workdir/short_read_pe_dataset/reads_1.fastq       \
+    --mate_2 /workdir/short_read_pe_dataset/reads_2.fastq       \
+    --fasta /workdir/short_read_pe_dataset/malaria_genome.fa    \
+    --gtf /workdir/short_read_pe_dataset/malaria_annotation.gtf \
+    --gsnap_idx /workdir/gsnap_idx/
+```
+
+3- Running DeepSAP with an alignment BAM file generated from short-read RNA-seq data.
+
+```bash
+docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm \
+    --volume $(pwd)/test:/workdir                               \
+    --volume $(pwd)/test/outputdir:/outputdir                   \
+    deepsap:v0.0.1                                              \
+    --out /outputdir/                                           \
+    --prefix test_run                                           \
+    --sam /workdir/short_read_pe_dataset/alignments.bam         \
+    --fasta /workdir/short_read_pe_dataset/malaria_genome.fa    \
+    --gtf /workdir/short_read_pe_dataset/malaria_annotation.gtf
+```
+
+## Command-line Arguments
+
+| Argument          | Description                                                                                          | Required       |
+|-------------------|------------------------------------------------------------------------------------------------------|----------------|
+| `-o, --out`       | Path to the output folder                                                                            | Yes            |
+| `--prefix`        | Output files prefix string                                                                           | Yes            |
+| `-g, --gtf`       | Path to the GTF annotation file compatible with the BAM file                                         | Yes            |
+| `-f, --fasta`     | Path to the FASTA genome file compatible with the BAM file                                           | Yes            |
+| `-s, --sam`       | Path to the SAM/BAM file or directory of files                                                       | Yes (if BAM)   |
+| `--mate_1`        | Path to FASTQ file of mate 1 (for paired-end reads)                                                  | Yes (if FASTQ) |
+| `--mate_2`        | Path to FASTQ file of mate 2 (for paired-end reads)                                                  | Yes (if FASTQ) |
+| `--gsnap_idx`     | Path to GSNAP index                                                                                  | No             |
+| `-c, --config`    | Config `.json` file to control DeepSAP internal parameters                                           | No             |
+| `--batch`         | Batch size for inference                                                                             | No             |
+| `--set_size`      | Set size to split datasets for inference                                                             | No             |
+| `-t, --threads`   | Number of threads                                                                                    | No             |
+| `--score_reads`   | Classify also reads using the transformer model and add scores to SAM, as appose to only SJ          | No             |
+| `--n_reads`       | Number of reads to classify if `--score_reads` is used                                               | No             |
+---
