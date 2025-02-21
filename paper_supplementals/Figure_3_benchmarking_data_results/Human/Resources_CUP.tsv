@@ -1,0 +1,19 @@
+	Run	Dataset	CPU
+137	DRAGEN 4.0.3 default	human T1	710
+138	DRAGEN 4.0.3 default	human T2	706
+139	DRAGEN 4.0.3 default	human T3	689
+725	DeepSAP MS150	human T1	151
+825	DeepSAP MS150	human T2	153
+925	DeepSAP MS150	human T3	149
+209	HISAT2 2.2.1 default	human T1	1996
+210	HISAT2 2.2.1 default	human T2	2035
+211	HISAT2 2.2.1 default	human T3	2058
+233	STAR 2.7.10a default	human T1	1462
+234	STAR 2.7.10a default	human T2	1576
+235	STAR 2.7.10a default	human T3	1696
+305	Subjunc 2.0.1 default	human T1	1011
+306	Subjunc 2.0.1 default	human T2	1010
+307	Subjunc 2.0.1 default	human T3	1019
+311	novoSplice 0.8.4 default	human T1	1971
+312	novoSplice 0.8.4 default	human T2	1996
+313	novoSplice 0.8.4 default	human T3	2020

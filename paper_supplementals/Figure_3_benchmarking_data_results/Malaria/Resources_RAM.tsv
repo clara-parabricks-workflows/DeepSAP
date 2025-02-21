@@ -1,0 +1,19 @@
+	Run	Dataset	RAM
+140	DRAGEN 4.0.3 default	malaria T1	7.764892578125
+141	DRAGEN 4.0.3 default	malaria T2	7.31497573852539
+142	DRAGEN 4.0.3 default	malaria T3	7.38848495483398
+1025	DeepSAP MS150	malaria T1	4.66233062744141
+1125	DeepSAP MS150	malaria T2	4.7701530456543
+1225	DeepSAP MS150	malaria T3	4.81535339355469
+212	HISAT2 2.2.1 default	malaria T1	0.18536376953125
+213	HISAT2 2.2.1 default	malaria T2	0.217849731445312
+214	HISAT2 2.2.1 default	malaria T3	0.1590576171875
+236	STAR 2.7.10a default	malaria T1	3.66612243652344
+237	STAR 2.7.10a default	malaria T2	3.66790771484375
+238	STAR 2.7.10a default	malaria T3	3.67402267456055
+308	Subjunc 2.0.1 default	malaria T1	2.81057739257812
+309	Subjunc 2.0.1 default	malaria T2	2.93874359130859
+310	Subjunc 2.0.1 default	malaria T3	3.06135559082031
+314	novoSplice 0.8.4 default	malaria T1	1.26133728027344
+315	novoSplice 0.8.4 default	malaria T2	1.266845703125
+316	novoSplice 0.8.4 default	malaria T3	1.28093338012695

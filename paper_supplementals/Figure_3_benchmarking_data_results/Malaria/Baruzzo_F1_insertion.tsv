@@ -1,0 +1,19 @@
+	Run	Dataset	F1_Insertion
+140	DRAGEN 4.0.3 default	malaria T1	81.0394378998983
+141	DRAGEN 4.0.3 default	malaria T2	78.3890151747865
+142	DRAGEN 4.0.3 default	malaria T3	54.8445601023367
+1025	DeepSAP MS150	malaria T1	89.5383768051084
+1125	DeepSAP MS150	malaria T2	86.6168371720866
+1225	DeepSAP MS150	malaria T3	67.4540931283247
+212	HISAT2 2.2.1 default	malaria T1	75.5925253004536
+213	HISAT2 2.2.1 default	malaria T2	55.7542798594848
+214	HISAT2 2.2.1 default	malaria T3	1.62612894674682
+236	STAR 2.7.10a default	malaria T1	78.2260433508807
+237	STAR 2.7.10a default	malaria T2	71.06498853564
+238	STAR 2.7.10a default	malaria T3	32.9387766934003
+308	Subjunc 2.0.1 default	malaria T1	90.9705567709473
+309	Subjunc 2.0.1 default	malaria T2	85.7235294999253
+310	Subjunc 2.0.1 default	malaria T3	24.8532096320234
+314	novoSplice 0.8.4 default	malaria T1	89.3984356681627
+315	novoSplice 0.8.4 default	malaria T2	85.8806792757467
+316	novoSplice 0.8.4 default	malaria T3	60.3299109540503

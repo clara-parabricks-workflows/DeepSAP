@@ -1,0 +1,15 @@
+Status	/data/RNAseqBenchmark/nextflow_May2024/cheesy_cajal/alignment/deepsap/DeepSAP__v0.0.1__GSNAP_24_6__baruzzo_human_t1r1.sorted.bam	/mnt/portable_disk/Fadel_rnaseq_data/RNAseqBenchmark/nextflow_DRAGEN_v4.0.3/scruffy_pesquet/alignment/dragen/DRAGEN__05.121.645.4.0.3__default__baruzzo_human_t1r1.sorted.bam	/mnt/portable_disk/Fadel_rnaseq_data/RNAseqBenchmark/nextflow_final_run/ridiculous_plateau/alignment/novoSplice/novoSplice__0.8.4__default__baruzzo_human_t1r1.sorted.bam	/mnt/portable_disk/Fadel_rnaseq_data/RNAseqBenchmark/nextflow_final_run/ridiculous_plateau/alignment/star/STAR__2.7.10a__default__baruzzo_human_t1r1.sorted.bam	/mnt/portable_disk/Fadel_rnaseq_data/RNAseqBenchmark/nextflow_final_run/ridiculous_plateau/alignment/hisat2/HISAT2__2.2.1__default__baruzzo_human_t1r1.sorted.bam	/mnt/portable_disk/Fadel_rnaseq_data/RNAseqBenchmark/nextflow_final_run/ridiculous_plateau/alignment/subjunc/Subjunc__2.0.1__default__baruzzo_human_t1r1.sorted.bam
+Assigned	9495563	9377961	9821365	9436884	9478131	8914432
+Unassigned_Unmapped	140	22461	27536	0	96742	1332411
+Unassigned_Read_Type	0	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0
+Unassigned_MultiMapping	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0	0
+Unassigned_NoFeatures	11324701	11197517	11549763	11221422	11500172	9753157
+Unassigned_Overlapping_Length	0	0	0	0	0	0
+Unassigned_Ambiguity	0	0	0	0	0	0

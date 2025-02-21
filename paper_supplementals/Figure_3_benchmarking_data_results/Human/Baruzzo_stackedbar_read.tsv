@@ -1,0 +1,19 @@
+	Run	Dataset	Reads_Alinged_Incorrectly	Reads_Alinged_Ambiguously	Reads_Alinged_Correctly	Reads_Unalinged
+137	DRAGEN 4.0.3 default	human T1	0.23976	1.73826	97.92198	0.1
+138	DRAGEN 4.0.3 default	human T2	0.27958	1.727405	97.843015	0.15
+139	DRAGEN 4.0.3 default	human T3	0.59298	1.818472	96.418548	1.17
+725	DeepSAP MS150	human T1	0.5	1.45	98.05	0
+825	DeepSAP MS150	human T2	0.56	1.47	97.97	0
+925	DeepSAP MS150	human T3	1.545815	1.904843	96.279342	0.27
+209	HISAT2 2.2.1 default	human T1	0.119448	2.279466	97.141086	0.46
+210	HISAT2 2.2.1 default	human T2	0.159647	2.188103	91.56225	6.09
+211	HISAT2 2.2.1 default	human T3	0.026356	0.261164	23.67248	76.04
+233	STAR 2.7.10a default	human T1	0.089847	1.916736	97.823417	0.17
+234	STAR 2.7.10a default	human T2	0.139594	2.183649	97.386757	0.29
+235	STAR 2.7.10a default	human T3	0.301716	1.818677	81.689607	16.19
+305	Subjunc 2.0.1 default	human T1	0.588042	0	92.751958	6.66
+306	Subjunc 2.0.1 default	human T2	0.613224	0	89.566776	9.82
+307	Subjunc 2.0.1 default	human T3	0.366054	0	46.563946	53.07
+311	novoSplice 0.8.4 default	human T1	0.079896	3.665229	96.124875	0.13
+312	novoSplice 0.8.4 default	human T2	0.09986	4.363882	95.396258	0.14
+313	novoSplice 0.8.4 default	human T3	0.179436	5.014764	89.2458	5.56
