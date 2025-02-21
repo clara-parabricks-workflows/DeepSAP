@@ -1,8 +1,8 @@
 # DeepSAP
 
-**DeepSAP** is a Transformer-based tool designed to improve splice junction detection in RNA-seq data. By default, DeepSAP utilizes the highly sensitive **GSNAP TGGA** aligner for FASTQ inputs. Alternatively, it can process pre-aligned BAM files directly. <br>
+**DeepSAP** is a Transformer-based workflow designed to improve splice junction detection in RNA-seq data. By default, DeepSAP utilizes the highly sensitive **GSNAP TGGA** aligner for FASTQ inputs. Alternatively, it can process pre-aligned BAM files directly. <br>
 
-We evaluated the performance of **DeepSAP** in our article titled *DeepSAP: A Novel Approach to Improve RNA-Seq Alignment Through Integration of Transcriptome Guidance and Transformer-Based Splice Junction Scoring*. In our benchmark, demonstrated outstanding performance. It consistently achieved the best results across all evaluated metrics using Baruzzo et al. datasets.
+We evaluated the performance of DeepSAP in our article titled ***DeepSAP: A Novel Approach to Improve RNA-Seq Alignment Through Integration of Transcriptome Guidance and Transformer-Based Splice Junction Scoring***. In our benchmark, DeepSAP demonstrated an outstanding performance, achieving consistently the best results across all evaluated metrics using Baruzzo et al. datasets.
 
 <img src="paper_supplementals/Figure_3_benchmarking_data_results/All/Baruzzo_spirder_recallsVsprecision.png" width="1000">
 
