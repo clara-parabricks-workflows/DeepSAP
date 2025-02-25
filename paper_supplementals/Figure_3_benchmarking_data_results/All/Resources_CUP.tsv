@@ -1,0 +1,37 @@
+	Run	Dataset	CPU
+137	DRAGEN 4.0.3 default	human T1	710
+138	DRAGEN 4.0.3 default	human T2	706
+139	DRAGEN 4.0.3 default	human T3	689
+140	DRAGEN 4.0.3 default	malaria T1	431
+141	DRAGEN 4.0.3 default	malaria T2	417
+142	DRAGEN 4.0.3 default	malaria T3	407
+725	DeepSAP MS150	human T1	151
+825	DeepSAP MS150	human T2	153
+925	DeepSAP MS150	human T3	149
+1025	DeepSAP MS150	malaria T1	181
+1125	DeepSAP MS150	malaria T2	190
+1225	DeepSAP MS150	malaria T3	187
+209	HISAT2 2.2.1 default	human T1	1996
+210	HISAT2 2.2.1 default	human T2	2035
+211	HISAT2 2.2.1 default	human T3	2058
+212	HISAT2 2.2.1 default	malaria T1	2074
+213	HISAT2 2.2.1 default	malaria T2	2084
+214	HISAT2 2.2.1 default	malaria T3	2081
+233	STAR 2.7.10a default	human T1	1462
+234	STAR 2.7.10a default	human T2	1576
+235	STAR 2.7.10a default	human T3	1696
+236	STAR 2.7.10a default	malaria T1	1916
+237	STAR 2.7.10a default	malaria T2	1962
+238	STAR 2.7.10a default	malaria T3	1983
+305	Subjunc 2.0.1 default	human T1	1011
+306	Subjunc 2.0.1 default	human T2	1010
+307	Subjunc 2.0.1 default	human T3	1019
+308	Subjunc 2.0.1 default	malaria T1	792
+309	Subjunc 2.0.1 default	malaria T2	804
+310	Subjunc 2.0.1 default	malaria T3	870
+311	novoSplice 0.8.4 default	human T1	1971
+312	novoSplice 0.8.4 default	human T2	1996
+313	novoSplice 0.8.4 default	human T3	2020
+314	novoSplice 0.8.4 default	malaria T1	2113
+315	novoSplice 0.8.4 default	malaria T2	2115
+316	novoSplice 0.8.4 default	malaria T3	2118

@@ -1,0 +1,98 @@
+
+        ==========     _____ _    _ ____  _____  ______          _____  
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+	  v2.0.6
+
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 6 BAM files                                      ||
+||                                                                            ||
+||                           DeepSAP__v0.0.1__GSNAP_24_6__baruzzo_human_t ... ||
+||                           DRAGEN__05.121.645.4.0.3__default__baruzzo_h ... ||
+||                           novoSplice__0.8.4__default__baruzzo_human_t3 ... ||
+||                           STAR__2.7.10a__default__baruzzo_human_t3r1.sorted.bam ||
+||                           HISAT2__2.2.1__default__baruzzo_human_t3r1.sorted.bam ||
+||                           Subjunc__2.0.1__default__baruzzo_human_t3r1.sorted.bam ||
+||                                                                            ||
+||             Output file : sj_counts_baruzzo_human_t3r1_0                   ||
+||                 Summary : sj_counts_baruzzo_human_t3r1_0.summary           ||
+||              Paired-end : yes                                              ||
+||        Count read pairs : no                                               ||
+||              Annotation : simulator_config_geneinfo_hg19_GTF (GTF)         ||
+||      Dir for temp files : /data/SpliceUp/DeepSAP-main/scripts/plots/fe ... ||
+||       Junction Counting : <output_file>.jcounts                            ||
+||                                                                            ||
+||                 Threads : 24                                               ||
+||                   Level : meta-feature level                               ||
+||      Multimapping reads : counted                                          ||
+|| Multi-overlapping reads : counted                                          ||
+||   Min overlapping bases : 1                                                ||
+||                                                                            ||
+\\============================================================================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file simulator_config_geneinfo_hg19_GTF ...                ||
+||    Features : 389202                                                       ||
+||    Meta-features : 60000                                                   ||
+||    Chromosomes/contigs : 24                                                ||
+||                                                                            ||
+|| Load FASTA contigs from GRCh37.primary_assembly.genome.fa...               ||
+||    84 contigs were loaded                                                  ||
+||                                                                            ||
+|| Process BAM file DeepSAP__v0.0.1__GSNAP_24_6__baruzzo_human_t3r1.sorte ... ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 20952057                                             ||
+||    Successfully assigned alignments : 9458118 (45.1%)                      ||
+||    Running time : 0.10 minutes                                             ||
+||                                                                            ||
+|| Process BAM file DRAGEN__05.121.645.4.0.3__default__baruzzo_human_t3r1 ... ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 20559320                                             ||
+||    Successfully assigned alignments : 9069332 (44.1%)                      ||
+||    Running time : 0.57 minutes                                             ||
+||                                                                            ||
+|| Process BAM file novoSplice__0.8.4__default__baruzzo_human_t3r1.sorted ... ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 21710760                                             ||
+||    Successfully assigned alignments : 9101322 (41.9%)                      ||
+||    Running time : 0.58 minutes                                             ||
+||                                                                            ||
+|| Process BAM file STAR__2.7.10a__default__baruzzo_human_t3r1.sorted.bam...  ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 17488376                                             ||
+||    Successfully assigned alignments : 6506857 (37.2%)                      ||
+||    Running time : 0.39 minutes                                             ||
+||                                                                            ||
+|| Process BAM file HISAT2__2.2.1__default__baruzzo_human_t3r1.sorted.bam...  ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 20337902                                             ||
+||    Successfully assigned alignments : 670904 (3.3%)                        ||
+||    Running time : 0.32 minutes                                             ||
+||                                                                            ||
+|| Process BAM file Subjunc__2.0.1__default__baruzzo_human_t3r1.sorted.ba ... ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 20000000                                             ||
+||    Successfully assigned alignments : 2605172 (13.0%)                      ||
+||    Running time : 0.40 minutes                                             ||
+||                                                                            ||
+|| Write the final count table.                                               ||
+|| Write the junction count table.                                            ||
+|| Write the read assignment summary.                                         ||
+||                                                                            ||
+|| Summary of counting results can be found in file "/data/SpliceUp/DeepSAP-  ||
+|| main/scripts/plots/featureCounts/counts/sj_counts_baruzzo_human_t3r1_0.su  ||
+|| mmary"                                                                     ||
+||                                                                            ||
+\\============================================================================//
+

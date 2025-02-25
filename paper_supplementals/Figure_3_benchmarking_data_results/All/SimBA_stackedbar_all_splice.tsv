@@ -1,0 +1,37 @@
+	Run	Dataset	RUN_ID	AM_splice	FN_splice	FP_splice
+317	DRAGEN 4.0.3 default	human T1	DRAGEN 4.0.3 default SimBA_human_t1	0	1236	673
+3127	DeepSAP MS150	human T1	DeepSAP v1.9-6-24 MS SimBA_human_t1	0	518	838
+389	HISAT2 2.2.1 default	human T1	HISAT2 2.2.1 default SimBA_human_t1	0	635	3780
+413	STAR 2.7.10a default	human T1	STAR 2.7.10a default SimBA_human_t1	0	1146	949
+485	Subjunc 2.0.1 default	human T1	Subjunc 2.0.1 default SimBA_human_t1	0	556	3221
+491	novoSplice 0.8.4 default	human T1	novoSplice 0.8.4 default SimBA_human_t1	0	950	361
+318	DRAGEN 4.0.3 default	human T2	DRAGEN 4.0.3 default SimBA_human_t2	0	1258	744
+3225	DeepSAP MS150	human T2	DeepSAP v1.9-6-24 MS SimBA_human_t2	0	605	938
+390	HISAT2 2.2.1 default	human T2	HISAT2 2.2.1 default SimBA_human_t2	0	885	4299
+414	STAR 2.7.10a default	human T2	STAR 2.7.10a default SimBA_human_t2	0	1234	1284
+486	Subjunc 2.0.1 default	human T2	Subjunc 2.0.1 default SimBA_human_t2	0	707	4288
+492	novoSplice 0.8.4 default	human T2	novoSplice 0.8.4 default SimBA_human_t2	0	942	447
+319	DRAGEN 4.0.3 default	human T3	DRAGEN 4.0.3 default SimBA_human_t3	0	1287	921
+3325	DeepSAP MS150	human T3	DeepSAP v1.9-6-24 MS SimBA_human_t3	0	625	1134
+391	HISAT2 2.2.1 default	human T3	HISAT2 2.2.1 default SimBA_human_t3	0	1259	5165
+415	STAR 2.7.10a default	human T3	STAR 2.7.10a default SimBA_human_t3	0	1414	1529
+487	Subjunc 2.0.1 default	human T3	Subjunc 2.0.1 default SimBA_human_t3	0	942	5406
+493	novoSplice 0.8.4 default	human T3	novoSplice 0.8.4 default SimBA_human_t3	0	833	712
+320	DRAGEN 4.0.3 default	malaria T1	DRAGEN 4.0.3 default SimBA_malaria_t1	0	95	406
+3425	DeepSAP MS150	malaria T1	DeepSAP v1.9-6-24 MS SimBA_malaria_t1	0	33	148
+392	HISAT2 2.2.1 default	malaria T1	HISAT2 2.2.1 default SimBA_malaria_t1	0	27	1251
+416	STAR 2.7.10a default	malaria T1	STAR 2.7.10a default SimBA_malaria_t1	0	63	2620
+488	Subjunc 2.0.1 default	malaria T1	Subjunc 2.0.1 default SimBA_malaria_t1	0	13	15620
+494	novoSplice 0.8.4 default	malaria T1	novoSplice 0.8.4 default SimBA_malaria_t1	0	44	35
+321	DRAGEN 4.0.3 default	malaria T2	DRAGEN 4.0.3 default SimBA_malaria_t2	0	251	400
+3525	DeepSAP MS150	malaria T2	DeepSAP v1.9-6-24 MS SimBA_malaria_t2	0	206	324
+393	HISAT2 2.2.1 default	malaria T2	HISAT2 2.2.1 default SimBA_malaria_t2	0	316	4049
+417	STAR 2.7.10a default	malaria T2	STAR 2.7.10a default SimBA_malaria_t2	0	144	10066
+489	Subjunc 2.0.1 default	malaria T2	Subjunc 2.0.1 default SimBA_malaria_t2	0	141	29756
+495	novoSplice 0.8.4 default	malaria T2	novoSplice 0.8.4 default SimBA_malaria_t2	0	66	438
+322	DRAGEN 4.0.3 default	malaria T3	DRAGEN 4.0.3 default SimBA_malaria_t3	0	547	847
+3625	DeepSAP MS150	malaria T3	DeepSAP v1.9-6-24 MS SimBA_malaria_t3	0	443	501
+394	HISAT2 2.2.1 default	malaria T3	HISAT2 2.2.1 default SimBA_malaria_t3	0	2106	2831
+418	STAR 2.7.10a default	malaria T3	STAR 2.7.10a default SimBA_malaria_t3	0	859	16826
+490	Subjunc 2.0.1 default	malaria T3	Subjunc 2.0.1 default SimBA_malaria_t3	0	741	35433
+496	novoSplice 0.8.4 default	malaria T3	novoSplice 0.8.4 default SimBA_malaria_t3	0	178	1326

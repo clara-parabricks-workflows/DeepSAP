@@ -1,0 +1,19 @@
+	Run	Dataset	Time
+137	DRAGEN 4.0.3 default	human T1	6.0875
+138	DRAGEN 4.0.3 default	human T2	6.1865
+139	DRAGEN 4.0.3 default	human T3	6.42
+725	DeepSAP MS150	human T1	18.5881666666667
+825	DeepSAP MS150	human T2	18.3478333333333
+925	DeepSAP MS150	human T3	21.3103333333333
+209	HISAT2 2.2.1 default	human T1	1.50933333333333
+210	HISAT2 2.2.1 default	human T2	2.0555
+211	HISAT2 2.2.1 default	human T3	2.80133333333333
+233	STAR 2.7.10a default	human T1	1.15283333333333
+234	STAR 2.7.10a default	human T2	1.51216666666667
+235	STAR 2.7.10a default	human T3	2.58266666666667
+305	Subjunc 2.0.1 default	human T1	10.0501666666667
+306	Subjunc 2.0.1 default	human T2	10.1336666666667
+307	Subjunc 2.0.1 default	human T3	10.1588333333333
+311	novoSplice 0.8.4 default	human T1	10.8776666666667
+312	novoSplice 0.8.4 default	human T2	11.2923333333333
+313	novoSplice 0.8.4 default	human T3	14.688

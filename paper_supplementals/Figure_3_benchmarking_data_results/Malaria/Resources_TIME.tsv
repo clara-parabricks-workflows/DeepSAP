@@ -1,0 +1,19 @@
+	Run	Dataset	Time
+140	DRAGEN 4.0.3 default	malaria T1	0.659833333333333
+141	DRAGEN 4.0.3 default	malaria T2	0.7445
+142	DRAGEN 4.0.3 default	malaria T3	0.977333333333333
+1025	DeepSAP MS150	malaria T1	9.22233333333333
+1125	DeepSAP MS150	malaria T2	8.646
+1225	DeepSAP MS150	malaria T3	9.45216666666667
+212	HISAT2 2.2.1 default	malaria T1	0.926
+213	HISAT2 2.2.1 default	malaria T2	1.14566666666667
+214	HISAT2 2.2.1 default	malaria T3	1.26483333333333
+236	STAR 2.7.10a default	malaria T1	1.776
+237	STAR 2.7.10a default	malaria T2	5.85666666666667
+238	STAR 2.7.10a default	malaria T3	38.361
+308	Subjunc 2.0.1 default	malaria T1	8.26933333333333
+309	Subjunc 2.0.1 default	malaria T2	8.36166666666667
+310	Subjunc 2.0.1 default	malaria T3	8.661
+314	novoSplice 0.8.4 default	malaria T1	7.92766666666667
+315	novoSplice 0.8.4 default	malaria T2	8.53216666666667
+316	novoSplice 0.8.4 default	malaria T3	13.4285

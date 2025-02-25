@@ -1,0 +1,37 @@
+	Run	Dataset	IO_in
+137	DRAGEN 4.0.3 default	human T1	5.02242279052734
+138	DRAGEN 4.0.3 default	human T2	3.48892974853516
+139	DRAGEN 4.0.3 default	human T3	3.90866088867188
+140	DRAGEN 4.0.3 default	malaria T1	2.983154296875
+141	DRAGEN 4.0.3 default	malaria T2	3.40398406982422
+142	DRAGEN 4.0.3 default	malaria T3	7.16376495361328
+725	DeepSAP MS150	human T1	5.26655578613281
+825	DeepSAP MS150	human T2	6.26320648193359
+925	DeepSAP MS150	human T3	6.55975341796875
+1025	DeepSAP MS150	malaria T1	6.45924377441406
+1125	DeepSAP MS150	malaria T2	3.24510192871094
+1225	DeepSAP MS150	malaria T3	3.15009307861328
+209	HISAT2 2.2.1 default	human T1	10.9951019287109
+210	HISAT2 2.2.1 default	human T2	4.31310272216797
+211	HISAT2 2.2.1 default	human T3	4.29538726806641
+212	HISAT2 2.2.1 default	malaria T1	0
+213	HISAT2 2.2.1 default	malaria T2	0.0994949340820312
+214	HISAT2 2.2.1 default	malaria T3	0
+233	STAR 2.7.10a default	human T1	57.7280502319336
+234	STAR 2.7.10a default	human T2	57.7265319824219
+235	STAR 2.7.10a default	human T3	57.7485885620117
+236	STAR 2.7.10a default	malaria T1	4.79397583007812
+237	STAR 2.7.10a default	malaria T2	4.80230712890625
+238	STAR 2.7.10a default	malaria T3	4.80284881591797
+305	Subjunc 2.0.1 default	human T1	0
+306	Subjunc 2.0.1 default	human T2	0
+307	Subjunc 2.0.1 default	human T3	7.78408050537109
+308	Subjunc 2.0.1 default	malaria T1	0.01190185546875
+309	Subjunc 2.0.1 default	malaria T2	0.171012878417969
+310	Subjunc 2.0.1 default	malaria T3	0
+311	novoSplice 0.8.4 default	human T1	14.1145248413086
+312	novoSplice 0.8.4 default	human T2	8.15113830566406
+313	novoSplice 0.8.4 default	human T3	14.1037292480469
+314	novoSplice 0.8.4 default	malaria T1	0.0615005493164062
+315	novoSplice 0.8.4 default	malaria T2	0
+316	novoSplice 0.8.4 default	malaria T3	0.0001220703125

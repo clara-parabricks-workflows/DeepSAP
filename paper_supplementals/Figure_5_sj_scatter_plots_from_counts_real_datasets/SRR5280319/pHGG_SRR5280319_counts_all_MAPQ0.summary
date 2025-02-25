@@ -1,0 +1,15 @@
+Status	/data/Benchmark/results/pHGG/analysis__GRCh38_GENCODE_r46__deepSAP/alignment/deepSAP/SRR5280319__GRCh38_GENCODE_r46__deepSAP.sorted.bam	/data/Benchmark/results/pHGG/analysis__GRCh38_GENCODE_r46__gsnap/alignment/gsnap/SRR5280319__GRCh38_GENCODE_r46__gsnap.sorted.bam	/data/Benchmark/results/pHGG/analysis__GRCh38_GENCODE_r46__dragen/alignment/dragen/SRR5280319/SRR5280319__GRCh38_GENCODE_r46__dragen.bam	/data/Benchmark/results/pHGG/analysis__GRCh38_GENCODE_r46__hisat2/alignment/hisat2/SRR5280319__GRCh38_GENCODE_r46__hisat2.sorted.bam	/data/Benchmark/results/pHGG/analysis__GRCh38_GENCODE_r46__novoSplice/alignment/novoSplice/SRR5280319__GRCh38_GENCODE_r46__novoSplice.sorted.bam	/data/Benchmark/results/pHGG/analysis__GRCh38_GENCODE_r46__star/alignment/star/SRR5280319__GRCh38_GENCODE_r46__star.sorted.bam	/data/Benchmark/results/pHGG/analysis__GRCh38_GENCODE_r46__subjunc/alignment/subjunc/SRR5280319__GRCh38_GENCODE_r46__subjunc.sorted.bam
+Assigned	53488842	53495816	50791162	51517764	53828580	52153454	42338471
+Unassigned_Unmapped	273303	273303	436844	982725	5194702	0	7710943
+Unassigned_Read_Type	0	0	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0	0
+Unassigned_MultiMapping	0	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0	0	0
+Unassigned_NoFeatures	80501462	80494488	80045493	84241002	71853284	79910000	62036894
+Unassigned_Overlapping_Length	0	0	0	0	0	0	0
+Unassigned_Ambiguity	0	0	0	0	0	0	0

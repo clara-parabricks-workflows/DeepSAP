@@ -1,0 +1,19 @@
+	Run	Dataset	F1_Deletion
+140	DRAGEN 4.0.3 default	malaria T1	80.9030883567
+141	DRAGEN 4.0.3 default	malaria T2	79.6940285749176
+142	DRAGEN 4.0.3 default	malaria T3	53.6582951168492
+1025	DeepSAP MS150	malaria T1	89.3999095877193
+1125	DeepSAP MS150	malaria T2	87.1994921250856
+1225	DeepSAP MS150	malaria T3	66.5906735751295
+212	HISAT2 2.2.1 default	malaria T1	75.9964921192919
+213	HISAT2 2.2.1 default	malaria T2	55.8584992252638
+214	HISAT2 2.2.1 default	malaria T3	1.56715660874088
+236	STAR 2.7.10a default	malaria T1	83.1195898886336
+237	STAR 2.7.10a default	malaria T2	77.2270322239085
+238	STAR 2.7.10a default	malaria T3	34.4108786477691
+308	Subjunc 2.0.1 default	malaria T1	91.3700486046639
+309	Subjunc 2.0.1 default	malaria T2	87.0101462522852
+310	Subjunc 2.0.1 default	malaria T3	22.8449205618236
+314	novoSplice 0.8.4 default	malaria T1	88.9130044779522
+315	novoSplice 0.8.4 default	malaria T2	86.0501282629289
+316	novoSplice 0.8.4 default	malaria T3	58.6333283156503

@@ -1,0 +1,19 @@
+	Run	Dataset	F1_mapping
+320	DRAGEN 4.0.3 default	malaria T1	91.8500969562328
+321	DRAGEN 4.0.3 default	malaria T2	91.7510963566941
+322	DRAGEN 4.0.3 default	malaria T3	91.4836905097959
+3425	DeepSAP MS150	malaria T1	91.927031955126
+3525	DeepSAP MS150	malaria T2	91.9728888302244
+3625	DeepSAP MS150	malaria T3	92.032419005303
+392	HISAT2 2.2.1 default	malaria T1	90.1986808061118
+393	HISAT2 2.2.1 default	malaria T2	79.5778264682553
+394	HISAT2 2.2.1 default	malaria T3	49.1159373300017
+416	STAR 2.7.10a default	malaria T1	91.3986327728868
+417	STAR 2.7.10a default	malaria T2	88.9385851676457
+418	STAR 2.7.10a default	malaria T3	80.2611634204499
+488	Subjunc 2.0.1 default	malaria T1	88.8013290852134
+489	Subjunc 2.0.1 default	malaria T2	88.7811372394556
+490	Subjunc 2.0.1 default	malaria T3	75.9044045674932
+494	novoSplice 0.8.4 default	malaria T1	91.7015237238661
+495	novoSplice 0.8.4 default	malaria T2	91.7238594500461
+496	novoSplice 0.8.4 default	malaria T3	90.9775594408265

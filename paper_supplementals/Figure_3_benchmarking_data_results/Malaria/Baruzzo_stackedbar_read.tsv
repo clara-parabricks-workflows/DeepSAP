@@ -1,0 +1,19 @@
+	Run	Dataset	Reads_Alinged_Incorrectly	Reads_Alinged_Ambiguously	Reads_Alinged_Correctly	Reads_Unalinged
+140	DRAGEN 4.0.3 default	malaria T1	0.019996	1.739652	98.220352	0.02
+141	DRAGEN 4.0.3 default	malaria T2	0.029988	1.839264	98.090748	0.04
+142	DRAGEN 4.0.3 default	malaria T3	0.166345	2.397325	95.28633	2.15
+1025	DeepSAP MS150	malaria T1	0.029982	1.389166	98.520852	0.06
+1125	DeepSAP MS150	malaria T2	0.049975	1.3993	98.500725	0.05
+1225	DeepSAP MS150	malaria T3	0.38766	1.63016	97.38218	0.6
+212	HISAT2 2.2.1 default	malaria T1	0.009909	1.942164	97.137927	0.91
+213	HISAT2 2.2.1 default	malaria T2	0.035292	1.658724	86.535984	11.77
+214	HISAT2 2.2.1 default	malaria T3	0	0.013442	6.096558	93.89
+236	STAR 2.7.10a default	malaria T1	0	2.14828	97.77172	0.08
+237	STAR 2.7.10a default	malaria T2	0	3.205185	96.644815	0.15
+238	STAR 2.7.10a default	malaria T3	0.061392	4.14396	72.534648	23.26
+308	Subjunc 2.0.1 default	malaria T1	0.412146	0	97.717854	1.87
+309	Subjunc 2.0.1 default	malaria T2	0.411532	0	93.118468	6.47
+310	Subjunc 2.0.1 default	malaria T3	0.525042	0	27.254958	72.22
+314	novoSplice 0.8.4 default	malaria T1	0	2.708645	97.241355	0.05
+315	novoSplice 0.8.4 default	malaria T2	0	3.15842	96.79158	0.05
+316	novoSplice 0.8.4 default	malaria T3	0.008923	3.845813	85.375264	10.77

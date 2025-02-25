@@ -1,0 +1,37 @@
+	Run	Dataset	Time
+137	DRAGEN 4.0.3 default	human T1	6.0875
+138	DRAGEN 4.0.3 default	human T2	6.1865
+139	DRAGEN 4.0.3 default	human T3	6.42
+140	DRAGEN 4.0.3 default	malaria T1	0.659833333333333
+141	DRAGEN 4.0.3 default	malaria T2	0.7445
+142	DRAGEN 4.0.3 default	malaria T3	0.977333333333333
+725	DeepSAP MS150	human T1	18.5881666666667
+825	DeepSAP MS150	human T2	18.3478333333333
+925	DeepSAP MS150	human T3	21.3103333333333
+1025	DeepSAP MS150	malaria T1	9.22233333333333
+1125	DeepSAP MS150	malaria T2	8.646
+1225	DeepSAP MS150	malaria T3	9.45216666666667
+209	HISAT2 2.2.1 default	human T1	1.50933333333333
+210	HISAT2 2.2.1 default	human T2	2.0555
+211	HISAT2 2.2.1 default	human T3	2.80133333333333
+212	HISAT2 2.2.1 default	malaria T1	0.926
+213	HISAT2 2.2.1 default	malaria T2	1.14566666666667
+214	HISAT2 2.2.1 default	malaria T3	1.26483333333333
+233	STAR 2.7.10a default	human T1	1.15283333333333
+234	STAR 2.7.10a default	human T2	1.51216666666667
+235	STAR 2.7.10a default	human T3	2.58266666666667
+236	STAR 2.7.10a default	malaria T1	1.776
+237	STAR 2.7.10a default	malaria T2	5.85666666666667
+238	STAR 2.7.10a default	malaria T3	38.361
+305	Subjunc 2.0.1 default	human T1	10.0501666666667
+306	Subjunc 2.0.1 default	human T2	10.1336666666667
+307	Subjunc 2.0.1 default	human T3	10.1588333333333
+308	Subjunc 2.0.1 default	malaria T1	8.26933333333333
+309	Subjunc 2.0.1 default	malaria T2	8.36166666666667
+310	Subjunc 2.0.1 default	malaria T3	8.661
+311	novoSplice 0.8.4 default	human T1	10.8776666666667
+312	novoSplice 0.8.4 default	human T2	11.2923333333333
+313	novoSplice 0.8.4 default	human T3	14.688
+314	novoSplice 0.8.4 default	malaria T1	7.92766666666667
+315	novoSplice 0.8.4 default	malaria T2	8.53216666666667
+316	novoSplice 0.8.4 default	malaria T3	13.4285
