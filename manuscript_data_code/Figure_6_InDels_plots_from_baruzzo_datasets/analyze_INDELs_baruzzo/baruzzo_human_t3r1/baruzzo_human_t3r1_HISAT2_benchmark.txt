@@ -1,0 +1,36 @@
+--------------------------------------
+total_number_of_reads:	20000000
+accuracy over all reads:	22.73%
+accuracy over uniquely aligned reads:	99.48%
+% reads aligned incorrectly:	0.11%
+% reads aligned ambiguously:	1.09%
+% reads unaligned:	76.04%
+% reads aligned:	23.959999999999994%
+% of reads with true introns:	13.4585%
+--------------------------------------
+total_number_of_bases_of_reads:	2000000000
+accuracy over all bases:	22.48%
+accuracy over uniquely aligned bases:	99.41%
+% bases aligned incorrectly:	0.13%
+% bases aligned ambiguously:	1.09%
+% bases unaligned:	76.28%
+% bases aligned:	23.72%
+% of bases in true insertions:	0.1815%
+% of bases in true deletions:	0.1645%
+insertions FD rate:	4.8499%
+insertions FN rate:	99.1199%
+insertions TP:	32014
+insertions FN:	3598466
+insertions FP:	1630
+deletions FD rate:	4.0399%
+deletions FN rate:	99.15%
+deletions TP:	28256%
+deletions FN:	3263554%
+deletions FP:	1187%
+skipping FD rate:	20.32%
+skipping FN rate:	94.37%
+--------------------------------------
+junctions FD rate:	7.56%
+junctions FN rate:	94.31%
+Junctions Sides (none|left|right|both):	13355|131|127|166689
+Junctions Sides (none|left|right|both)% of all called:	7.4%|0.0699%|0.0699%|92.44%
