@@ -41,7 +41,7 @@ Update the paths in the provided example commands to point to the files in the [
 1- Running DeepSAP with short-read RNA-seq FASTQ files
 
 ```bash
-docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
+docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
     --volume $(pwd)/test:/workdir                                                   \
     --volume $(pwd)/test/outputdir:/outputdir                                       \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
@@ -56,7 +56,7 @@ docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --r
 2- Running DeepSAP with short-read RNA-seq FASTQ files and GSNAP index.
 
 ```bash
-docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
+docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
     --volume $(pwd)/test:/workdir                                                   \
     --volume $(pwd)/test/outputdir:/outputdir                                       \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
