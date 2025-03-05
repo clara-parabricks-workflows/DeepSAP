@@ -23,53 +23,56 @@ For additional resources, including data, detailed analyses, and other supplemen
 - Annotaion file in GTF format
 
 ## Installation
-To run DeepSAP, you need Docker with GPU support. Ensure that the DeepSAP Docker image `nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest` is available locally.
+To use DeepSAP, you must have Docker with GPU support enabled and make sure the DeepSAP Docker image is available on your system. You can obtain the image by running the following command:
+```bash
+$ docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:<TAG>
+```
 
 ## Usage
-DeepSAP comes with a sample dataset located in the test folder to help users get started. This dataset includes:
+You can use the accompanied dataset named **`malaria_short_pe`** under the [`test`](test/) folder to test DeepSAP's functionality with minimal setup. This dataset includes:
 
-- A pre-aligned BAM file for short-read RNA-seq data.
-- Paired-end FASTQ files for alignment.
+- Paired-end FASTQ files for alignment. 
 - Malaria reference genome in FASTA format.
 - Malaria annotation file in GTF format.
 
-You can use this dataset to test DeepSAP's functionality with minimal setup. Update the paths in the provided example commands to point to the files in the test folder.
+Update the paths in the provided example commands to point to the files in the [`test`](test/) folder.
+
 
 1- Running DeepSAP with short-read RNA-seq FASTQ files
 
 ```bash
-docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm \
-    --volume $(pwd)/test:/workdir                               \
-    --volume $(pwd)/test/outputdir:/outputdir                   \
-    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest        \
-    --out /outputdir/                                           \
-    --prefix test_run                                           \
-    --mate_1 /workdir/short_read_pe_dataset/reads_1.fastq       \
-    --mate_2 /workdir/short_read_pe_dataset/reads_2.fastq       \
-    --fasta /workdir/short_read_pe_dataset/malaria_genome.fa    \
-    --gtf /workdir/short_read_pe_dataset/malaria_annotation.gtf
+docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
+    --volume $(pwd)/test:/workdir                                                   \
+    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
+    --out /outputdir/                                                               \
+    --prefix test_run_10K                                                           \
+    --mate_1 /workdir/malaria_short_pe/SRR14793977_10K_1.fastq.gz                   \
+    --mate_2 /workdir/malaria_short_pe/SRR14793977_10K_2.fastq.gz                   \
+    --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
+    --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
 ```
 
 2- Running DeepSAP with short-read RNA-seq FASTQ files and GSNAP index.
 
 ```bash
-docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm \
-    --volume $(pwd)/test:/workdir                               \
-    --volume $(pwd)/test/outputdir:/outputdir                   \
-    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest        \
-    --out /outputdir/                                           \
-    --prefix test_run                                           \
-    --mate_1 /workdir/short_read_pe_dataset/reads_1.fastq       \
-    --mate_2 /workdir/short_read_pe_dataset/reads_2.fastq       \
-    --fasta /workdir/short_read_pe_dataset/malaria_genome.fa    \
-    --gtf /workdir/short_read_pe_dataset/malaria_annotation.gtf \
+docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
+    --volume $(pwd)/test:/workdir                                                   \
+    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
+    --out /outputdir/                                                               \
+    --prefix test_run_10K                                                           \
+    --mate_1 /workdir/malaria_short_pe/SRR14793977_10K_1.fastq.gz                   \
+    --mate_2 /workdir/malaria_short_pe/SRR14793977_10K_2.fastq.gz                   \
+    --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
+    --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa\
     --gsnap_idx /workdir/gsnap_idx/
 ```
 
 <!-- 3- Running DeepSAP with an alignment BAM file generated from short-read RNA-seq data.
 
 ```bash
-docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm \
+$docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm \
     --volume $(pwd)/test:/workdir                               \
     --volume $(pwd)/test/outputdir:/outputdir                   \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest        \
@@ -102,4 +105,4 @@ docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --r
 
 
 ## License/Terms of Use
-Governing Terms: The software and materials are governed by the NVIDIA Software License Agreement (found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and the Product-Specific Terms for NVIDIA AI Products (found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/); except for the model which is governed by the NVIDIA Models Community License Agreement(found at NVIDIA Community Model License). ADDITIONAL INFORMATION: Apache 2.0.
+By pulling and using the Parabricks container, you accept the governing terms: The software and materials are governed by the NVIDIA Software License Agreement (found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and the Product-Specific Terms for NVIDIA AI Products (found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/); except for the model which is governed by the NVIDIA Models Community License Agreement(found at NVIDIA Community Model License). ADDITIONAL INFORMATION: Apache 2.0.
