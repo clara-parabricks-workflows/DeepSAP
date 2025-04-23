@@ -37,7 +37,6 @@ You can use the accompanied dataset named **`malaria_short_pe`** under the [`tes
 
 Update the paths in the provided example commands to point to the files in the [`test`](test/) folder.
 
-
 1- Running DeepSAP with short-read RNA-seq FASTQ files
 
 ```bash
@@ -66,7 +65,7 @@ docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
     --mate_2 /workdir/malaria_short_pe/SRR14793977_10K_2.fastq.gz                   \
     --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa\
-    --gsnap_idx /workdir/gsnap_idx/
+    --gsnap_idx /outputdir/gsnap_idx/
 ```
 
 <!-- 3- Running DeepSAP with an alignment BAM file generated from short-read RNA-seq data.
@@ -105,4 +104,4 @@ $docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --
 
 
 ## License/Terms of Use
-By pulling and using the Parabricks container, you accept the governing terms: The software and materials are governed by the NVIDIA Software License Agreement (found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and the Product-Specific Terms for NVIDIA AI Products (found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/); except for the model which is governed by the NVIDIA Models Community License Agreement(found at NVIDIA Community Model License). ADDITIONAL INFORMATION: Apache 2.0.
+By pulling and using the Parabricks container, you accept the governing terms: The software and materials are governed by the NVIDIA Software License Agreement (found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and the Product-Specific Terms for NVIDIA AI Products (found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/); except for the model which is governed by the NVIDIA Models Community License Agreement(found at NVIDIA Community Model License). ADDITIONAL INFORMATION: Apache 2.0 (found at https://www.apache.org/licenses/LICENSE-2.0.txt).
