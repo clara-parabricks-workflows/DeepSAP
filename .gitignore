@@ -1,1 +1,7 @@
 manuscript_data_code/Figure_6_InDels_plots_from_baruzzo_datasets/analyze_INDELs_baruzzo.zip
+.Rproj.user
+.obsidian/*
+DeepSAP.git/
+notes/*
+presentations/*
+manuscript_data_code/*.sh
