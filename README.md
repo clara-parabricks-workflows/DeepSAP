@@ -6,7 +6,7 @@ We evaluated the performance of DeepSAP in our article titled ***DeepSAP: A Nove
 
 <img src="manuscript_data_code/Figure_3_benchmarking_data_results/All/Baruzzo_spirder_recallsVsprecision.png" width="1000">
 
-For additional resources, including data, detailed analyses, and other supplementary materials related to the **DeepSAP** paper, please refer to the **paper_supplementals/README.md** file in this repository. 
+For additional resources, including data, detailed analyses, and other supplementary materials related to the **DeepSAP** paper, please refer to the **manuscript_data_code/README.md** file in this repository. 
 
 ## Table of Contents
 - [Requirements](#requirements)
