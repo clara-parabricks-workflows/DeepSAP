@@ -1,0 +1,6 @@
+Competitor,DeepSAP_better,Competitor_better,McNemar_p
+DRAGEN 4.0.3 default,6,0,0.03125
+HISAT2 2.2.1 default,6,0,0.03125
+STAR 2.7.10a default,6,0,0.03125
+Subjunc 2.0.1 default,6,0,0.03125
+novoSplice 0.8.4 default,6,0,0.03125

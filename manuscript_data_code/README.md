@@ -6,7 +6,7 @@ This repository contains the data, figures, and scripts used in the **DeepSAP ma
 1. **Fine-tuning & evaluation**: Refer to `Figure_2_dataset_for_fine-tuning_evaluation/tune_transformers.html`.
 2. **Comapring fine-tuned models**: Refer to `Figure_2_dataset_for_fine-tuning_evaluation/visulize_models.html`.
 3. **RNA-seq aligners benchmarking Nextflow**: See `Figure_3_benchmarking_data_results/Nextflow.md`.
-4. **RNA-seq aligners benchmarking results**: See `Figure_3_benchmarking_data_results/results.tsv`.
+4. **RNA-seq aligners benchmarking results**: See `Figure_3_benchmarking_data_results/results.csv`.
 5. **Splice junction analysis**:
    - Baruzzo datasets: `Figure_4_sj_scatter_plots_from_counts_baruzzo_datasets/workflow_generating_scatter_plots_baruzzo.html`
    - Real datasets: `Figure_5_sj_scatter_plots_from_counts_real_datasets/workflow_generating_scatter_plots_real.html`
@@ -40,11 +40,13 @@ Below is an overview of the repository structure and its contents:
 
 ### **Figure 3 - Benchmarking Data & Results**
 📂 `Figure_3_benchmarking_data_results/`
-- Contains **benchmarking results** for Baruzzo and SimBA datasets shown in Fig. 3 and Fig. 3S.
+- Contains **benchmarking results** for Baruzzo and SimBA datasets shown in Fig. 3,  Fig. 3S and Fig. 6S.
 - **Key folders and files**:
   - `All/`, `Human/`, `Malaria/` - Benchmarking .png and .csv files for Human only datasets, Malaria only datasets and Humand & Malaria datasets.
   - `Nextflow.md` - Documentation for Nextflow pipeline.
-  - `results.tsv` - Table with benchmarking results produced by the Nextflow pipeline.
+  - `results.csv` - Table with benchmarking results produced by the Nextflow pipeline.
+  - `statistical_testing_per-read-pair` - Jupyter notebookd of the per-read-pair statistical analysis in Fig 3d.
+  - `statistical_testing_boostrapping` - Jupyter notebookd of the boostrappin analysis in Fig 6S.
 
 ### **Figure 4 - Splice Junction Scatter Plots (Baruzzo Datasets)**
 📂 `Figure_4_sj_scatter_plots_from_counts_baruzzo_datasets/`

@@ -1,0 +1,55 @@
+,Run,Dataset,CPU
+1,DRAGEN 4.0.3 default,human T1 R2,677
+2,DRAGEN 4.0.3 default,human T1 R3,701
+3,DRAGEN 4.0.3 default,human T2 R2,669
+4,DRAGEN 4.0.3 default,human T2 R3,712
+5,DRAGEN 4.0.3 default,human T3 R2,697
+6,DRAGEN 4.0.3 default,human T3 R3,703
+137,DRAGEN 4.0.3 default,human T1 R1,710
+138,DRAGEN 4.0.3 default,human T2 R1,706
+139,DRAGEN 4.0.3 default,human T3 R1,689
+13,DeepSAP MS150,human T1 R2,0
+14,DeepSAP MS150,human T1 R3,0
+15,DeepSAP MS150,human T2 R2,0
+16,DeepSAP MS150,human T2 R3,0
+17,DeepSAP MS150,human T3 R2,0
+18,DeepSAP MS150,human T3 R3,0
+725,DeepSAP MS150,human T1 R1,151
+825,DeepSAP MS150,human T2 R1,153
+925,DeepSAP MS150,human T3 R1,149
+37,HISAT2 2.2.1 default,human T1 R2,2188
+38,HISAT2 2.2.1 default,human T1 R3,2187
+39,HISAT2 2.2.1 default,human T2 R2,2224
+40,HISAT2 2.2.1 default,human T2 R3,1654
+41,HISAT2 2.2.1 default,human T3 R2,2270
+42,HISAT2 2.2.1 default,human T3 R3,2271
+209,HISAT2 2.2.1 default,human T1 R1,1996
+210,HISAT2 2.2.1 default,human T2 R1,2035
+211,HISAT2 2.2.1 default,human T3 R1,2058
+49,STAR 2.7.10a default,human T1 R2,1291
+50,STAR 2.7.10a default,human T1 R3,1262
+51,STAR 2.7.10a default,human T2 R2,1135
+52,STAR 2.7.10a default,human T2 R3,625
+53,STAR 2.7.10a default,human T3 R2,1220
+54,STAR 2.7.10a default,human T3 R3,1781
+233,STAR 2.7.10a default,human T1 R1,1462
+234,STAR 2.7.10a default,human T2 R1,1576
+235,STAR 2.7.10a default,human T3 R1,1696
+61,Subjunc 2.0.1 default,human T1 R2,1033
+62,Subjunc 2.0.1 default,human T1 R3,981
+63,Subjunc 2.0.1 default,human T2 R2,1023
+64,Subjunc 2.0.1 default,human T2 R3,1036
+65,Subjunc 2.0.1 default,human T3 R2,1051
+66,Subjunc 2.0.1 default,human T3 R3,1050
+305,Subjunc 2.0.1 default,human T1 R1,1011
+306,Subjunc 2.0.1 default,human T2 R1,1010
+307,Subjunc 2.0.1 default,human T3 R1,1019
+73,novoSplice 0.8.4 default,human T1 R2,2288
+74,novoSplice 0.8.4 default,human T1 R3,2293
+75,novoSplice 0.8.4 default,human T2 R2,2300
+76,novoSplice 0.8.4 default,human T2 R3,2299
+77,novoSplice 0.8.4 default,human T3 R2,2317
+78,novoSplice 0.8.4 default,human T3 R3,2258
+311,novoSplice 0.8.4 default,human T1 R1,1971
+312,novoSplice 0.8.4 default,human T2 R1,1996
+313,novoSplice 0.8.4 default,human T3 R1,2020

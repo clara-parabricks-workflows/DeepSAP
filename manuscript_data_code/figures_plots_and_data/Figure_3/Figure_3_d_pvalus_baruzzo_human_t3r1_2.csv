@@ -1,0 +1,4 @@
+metric,dataset,aligner1,aligner2,p_value,stars
+del_recall,baruzzo_human_t3r1,DeepSAP,DRAGEN,1e-308,***
+ins_recall,baruzzo_human_t3r1,DeepSAP,DRAGEN,1e-308,***
+junction_recall,baruzzo_human_t3r1,DeepSAP,DRAGEN,1e-308,***

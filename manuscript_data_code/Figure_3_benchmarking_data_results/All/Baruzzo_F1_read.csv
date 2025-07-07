@@ -1,0 +1,109 @@
+,Run,Dataset
+1,DRAGEN 4.0.3 default,human T1 R2
+2,DRAGEN 4.0.3 default,human T1 R3
+3,DRAGEN 4.0.3 default,human T2 R2
+4,DRAGEN 4.0.3 default,human T2 R3
+5,DRAGEN 4.0.3 default,human T3 R2
+6,DRAGEN 4.0.3 default,human T3 R3
+7,DRAGEN 4.0.3 default,malaria T1 R2
+8,DRAGEN 4.0.3 default,malaria T1 R3
+9,DRAGEN 4.0.3 default,malaria T2 R2
+10,DRAGEN 4.0.3 default,malaria T2 R3
+11,DRAGEN 4.0.3 default,malaria T3 R2
+12,DRAGEN 4.0.3 default,malaria T3 R3
+137,DRAGEN 4.0.3 default,human T1 R1
+138,DRAGEN 4.0.3 default,human T2 R1
+139,DRAGEN 4.0.3 default,human T3 R1
+140,DRAGEN 4.0.3 default,malaria T1 R1
+141,DRAGEN 4.0.3 default,malaria T2 R1
+142,DRAGEN 4.0.3 default,malaria T3 R1
+13,DeepSAP MS150,human T1 R2
+14,DeepSAP MS150,human T1 R3
+15,DeepSAP MS150,human T2 R2
+16,DeepSAP MS150,human T2 R3
+17,DeepSAP MS150,human T3 R2
+18,DeepSAP MS150,human T3 R3
+19,DeepSAP MS150,malaria T1 R2
+20,DeepSAP MS150,malaria T1 R3
+21,DeepSAP MS150,malaria T2 R2
+22,DeepSAP MS150,malaria T2 R3
+23,DeepSAP MS150,malaria T3 R2
+24,DeepSAP MS150,malaria T3 R3
+725,DeepSAP MS150,human T1 R1
+825,DeepSAP MS150,human T2 R1
+925,DeepSAP MS150,human T3 R1
+1025,DeepSAP MS150,malaria T1 R1
+1125,DeepSAP MS150,malaria T2 R1
+1225,DeepSAP MS150,malaria T3 R1
+37,HISAT2 2.2.1 default,human T1 R2
+38,HISAT2 2.2.1 default,human T1 R3
+39,HISAT2 2.2.1 default,human T2 R2
+40,HISAT2 2.2.1 default,human T2 R3
+41,HISAT2 2.2.1 default,human T3 R2
+42,HISAT2 2.2.1 default,human T3 R3
+43,HISAT2 2.2.1 default,malaria T1 R2
+44,HISAT2 2.2.1 default,malaria T1 R3
+45,HISAT2 2.2.1 default,malaria T2 R2
+46,HISAT2 2.2.1 default,malaria T2 R3
+47,HISAT2 2.2.1 default,malaria T3 R2
+48,HISAT2 2.2.1 default,malaria T3 R3
+209,HISAT2 2.2.1 default,human T1 R1
+210,HISAT2 2.2.1 default,human T2 R1
+211,HISAT2 2.2.1 default,human T3 R1
+212,HISAT2 2.2.1 default,malaria T1 R1
+213,HISAT2 2.2.1 default,malaria T2 R1
+214,HISAT2 2.2.1 default,malaria T3 R1
+49,STAR 2.7.10a default,human T1 R2
+50,STAR 2.7.10a default,human T1 R3
+51,STAR 2.7.10a default,human T2 R2
+52,STAR 2.7.10a default,human T2 R3
+53,STAR 2.7.10a default,human T3 R2
+54,STAR 2.7.10a default,human T3 R3
+55,STAR 2.7.10a default,malaria T1 R2
+56,STAR 2.7.10a default,malaria T1 R3
+57,STAR 2.7.10a default,malaria T2 R2
+58,STAR 2.7.10a default,malaria T2 R3
+59,STAR 2.7.10a default,malaria T3 R2
+60,STAR 2.7.10a default,malaria T3 R3
+233,STAR 2.7.10a default,human T1 R1
+234,STAR 2.7.10a default,human T2 R1
+235,STAR 2.7.10a default,human T3 R1
+236,STAR 2.7.10a default,malaria T1 R1
+237,STAR 2.7.10a default,malaria T2 R1
+238,STAR 2.7.10a default,malaria T3 R1
+61,Subjunc 2.0.1 default,human T1 R2
+62,Subjunc 2.0.1 default,human T1 R3
+63,Subjunc 2.0.1 default,human T2 R2
+64,Subjunc 2.0.1 default,human T2 R3
+65,Subjunc 2.0.1 default,human T3 R2
+66,Subjunc 2.0.1 default,human T3 R3
+67,Subjunc 2.0.1 default,malaria T1 R2
+68,Subjunc 2.0.1 default,malaria T1 R3
+69,Subjunc 2.0.1 default,malaria T2 R2
+70,Subjunc 2.0.1 default,malaria T2 R3
+71,Subjunc 2.0.1 default,malaria T3 R2
+72,Subjunc 2.0.1 default,malaria T3 R3
+305,Subjunc 2.0.1 default,human T1 R1
+306,Subjunc 2.0.1 default,human T2 R1
+307,Subjunc 2.0.1 default,human T3 R1
+308,Subjunc 2.0.1 default,malaria T1 R1
+309,Subjunc 2.0.1 default,malaria T2 R1
+310,Subjunc 2.0.1 default,malaria T3 R1
+73,novoSplice 0.8.4 default,human T1 R2
+74,novoSplice 0.8.4 default,human T1 R3
+75,novoSplice 0.8.4 default,human T2 R2
+76,novoSplice 0.8.4 default,human T2 R3
+77,novoSplice 0.8.4 default,human T3 R2
+78,novoSplice 0.8.4 default,human T3 R3
+79,novoSplice 0.8.4 default,malaria T1 R2
+80,novoSplice 0.8.4 default,malaria T1 R3
+81,novoSplice 0.8.4 default,malaria T2 R2
+82,novoSplice 0.8.4 default,malaria T2 R3
+83,novoSplice 0.8.4 default,malaria T3 R2
+84,novoSplice 0.8.4 default,malaria T3 R3
+311,novoSplice 0.8.4 default,human T1 R1
+312,novoSplice 0.8.4 default,human T2 R1
+313,novoSplice 0.8.4 default,human T3 R1
+314,novoSplice 0.8.4 default,malaria T1 R1
+315,novoSplice 0.8.4 default,malaria T2 R1
+316,novoSplice 0.8.4 default,malaria T3 R1

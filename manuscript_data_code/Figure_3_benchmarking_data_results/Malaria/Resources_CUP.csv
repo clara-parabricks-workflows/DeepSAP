@@ -1,0 +1,55 @@
+,Run,Dataset,CPU
+7,DRAGEN 4.0.3 default,malaria T1 R2,442
+8,DRAGEN 4.0.3 default,malaria T1 R3,455
+9,DRAGEN 4.0.3 default,malaria T2 R2,465
+10,DRAGEN 4.0.3 default,malaria T2 R3,343
+11,DRAGEN 4.0.3 default,malaria T3 R2,442
+12,DRAGEN 4.0.3 default,malaria T3 R3,417
+140,DRAGEN 4.0.3 default,malaria T1 R1,431
+141,DRAGEN 4.0.3 default,malaria T2 R1,417
+142,DRAGEN 4.0.3 default,malaria T3 R1,407
+19,DeepSAP MS150,malaria T1 R2,0
+20,DeepSAP MS150,malaria T1 R3,0
+21,DeepSAP MS150,malaria T2 R2,0
+22,DeepSAP MS150,malaria T2 R3,0
+23,DeepSAP MS150,malaria T3 R2,0
+24,DeepSAP MS150,malaria T3 R3,0
+1025,DeepSAP MS150,malaria T1 R1,181
+1125,DeepSAP MS150,malaria T2 R1,190
+1225,DeepSAP MS150,malaria T3 R1,187
+43,HISAT2 2.2.1 default,malaria T1 R2,2261
+44,HISAT2 2.2.1 default,malaria T1 R3,2197
+45,HISAT2 2.2.1 default,malaria T2 R2,2251
+46,HISAT2 2.2.1 default,malaria T2 R3,2253
+47,HISAT2 2.2.1 default,malaria T3 R2,2286
+48,HISAT2 2.2.1 default,malaria T3 R3,2296
+212,HISAT2 2.2.1 default,malaria T1 R1,2074
+213,HISAT2 2.2.1 default,malaria T2 R1,2084
+214,HISAT2 2.2.1 default,malaria T3 R1,2081
+55,STAR 2.7.10a default,malaria T1 R2,2115
+56,STAR 2.7.10a default,malaria T1 R3,1989
+57,STAR 2.7.10a default,malaria T2 R2,2166
+58,STAR 2.7.10a default,malaria T2 R3,2012
+59,STAR 2.7.10a default,malaria T3 R2,2192
+60,STAR 2.7.10a default,malaria T3 R3,2176
+236,STAR 2.7.10a default,malaria T1 R1,1916
+237,STAR 2.7.10a default,malaria T2 R1,1962
+238,STAR 2.7.10a default,malaria T3 R1,1983
+67,Subjunc 2.0.1 default,malaria T1 R2,771
+68,Subjunc 2.0.1 default,malaria T1 R3,769
+69,Subjunc 2.0.1 default,malaria T2 R2,789
+70,Subjunc 2.0.1 default,malaria T2 R3,793
+71,Subjunc 2.0.1 default,malaria T3 R2,880
+72,Subjunc 2.0.1 default,malaria T3 R3,880
+308,Subjunc 2.0.1 default,malaria T1 R1,792
+309,Subjunc 2.0.1 default,malaria T2 R1,804
+310,Subjunc 2.0.1 default,malaria T3 R1,870
+79,novoSplice 0.8.4 default,malaria T1 R2,2379
+80,novoSplice 0.8.4 default,malaria T1 R3,2379
+81,novoSplice 0.8.4 default,malaria T2 R2,2374
+82,novoSplice 0.8.4 default,malaria T2 R3,2244
+83,novoSplice 0.8.4 default,malaria T3 R2,2382
+84,novoSplice 0.8.4 default,malaria T3 R3,2384
+314,novoSplice 0.8.4 default,malaria T1 R1,2113
+315,novoSplice 0.8.4 default,malaria T2 R1,2115
+316,novoSplice 0.8.4 default,malaria T3 R1,2118

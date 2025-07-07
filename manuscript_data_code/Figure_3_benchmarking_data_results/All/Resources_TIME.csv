@@ -1,0 +1,109 @@
+,Run,Dataset,Time
+1,DRAGEN 4.0.3 default,human T1 R2,6.15516666666667
+2,DRAGEN 4.0.3 default,human T1 R3,5.90283333333333
+3,DRAGEN 4.0.3 default,human T2 R2,6.22083333333333
+4,DRAGEN 4.0.3 default,human T2 R3,5.7855
+5,DRAGEN 4.0.3 default,human T3 R2,6.02
+6,DRAGEN 4.0.3 default,human T3 R3,6.00166666666667
+7,DRAGEN 4.0.3 default,malaria T1 R2,0.659833333333333
+8,DRAGEN 4.0.3 default,malaria T1 R3,0.627
+9,DRAGEN 4.0.3 default,malaria T2 R2,0.677
+10,DRAGEN 4.0.3 default,malaria T2 R3,0.908
+11,DRAGEN 4.0.3 default,malaria T3 R2,0.910333333333333
+12,DRAGEN 4.0.3 default,malaria T3 R3,0.977166666666667
+137,DRAGEN 4.0.3 default,human T1 R1,6.0875
+138,DRAGEN 4.0.3 default,human T2 R1,6.1865
+139,DRAGEN 4.0.3 default,human T3 R1,6.42
+140,DRAGEN 4.0.3 default,malaria T1 R1,0.659833333333333
+141,DRAGEN 4.0.3 default,malaria T2 R1,0.7445
+142,DRAGEN 4.0.3 default,malaria T3 R1,0.977333333333333
+13,DeepSAP MS150,human T1 R2,15.8046666666667
+14,DeepSAP MS150,human T1 R3,15.6401666666667
+15,DeepSAP MS150,human T2 R2,16.2273333333333
+16,DeepSAP MS150,human T2 R3,16.1765
+17,DeepSAP MS150,human T3 R2,18.8365
+18,DeepSAP MS150,human T3 R3,18.5133333333333
+19,DeepSAP MS150,malaria T1 R2,4.57983333333333
+20,DeepSAP MS150,malaria T1 R3,5.11433333333333
+21,DeepSAP MS150,malaria T2 R2,4.71216666666667
+22,DeepSAP MS150,malaria T2 R3,4.87333333333333
+23,DeepSAP MS150,malaria T3 R2,5.2125
+24,DeepSAP MS150,malaria T3 R3,5.21766666666667
+725,DeepSAP MS150,human T1 R1,18.5881666666667
+825,DeepSAP MS150,human T2 R1,18.3478333333333
+925,DeepSAP MS150,human T3 R1,21.3103333333333
+1025,DeepSAP MS150,malaria T1 R1,9.22233333333333
+1125,DeepSAP MS150,malaria T2 R1,8.646
+1225,DeepSAP MS150,malaria T3 R1,9.45216666666667
+37,HISAT2 2.2.1 default,human T1 R2,1.398
+38,HISAT2 2.2.1 default,human T1 R3,1.40083333333333
+39,HISAT2 2.2.1 default,human T2 R2,1.86083333333333
+40,HISAT2 2.2.1 default,human T2 R3,2.51383333333333
+41,HISAT2 2.2.1 default,human T3 R2,2.52516666666667
+42,HISAT2 2.2.1 default,human T3 R3,2.52916666666667
+43,HISAT2 2.2.1 default,malaria T1 R2,0.952333333333333
+44,HISAT2 2.2.1 default,malaria T1 R3,1.41483333333333
+45,HISAT2 2.2.1 default,malaria T2 R2,1.06566666666667
+46,HISAT2 2.2.1 default,malaria T2 R3,1.06433333333333
+47,HISAT2 2.2.1 default,malaria T3 R2,1.1495
+48,HISAT2 2.2.1 default,malaria T3 R3,1.1485
+209,HISAT2 2.2.1 default,human T1 R1,1.50933333333333
+210,HISAT2 2.2.1 default,human T2 R1,2.0555
+211,HISAT2 2.2.1 default,human T3 R1,2.80133333333333
+212,HISAT2 2.2.1 default,malaria T1 R1,0.926
+213,HISAT2 2.2.1 default,malaria T2 R1,1.14566666666667
+214,HISAT2 2.2.1 default,malaria T3 R1,1.26483333333333
+49,STAR 2.7.10a default,human T1 R2,1.30216666666667
+50,STAR 2.7.10a default,human T1 R3,1.32316666666667
+51,STAR 2.7.10a default,human T2 R2,2.10683333333333
+52,STAR 2.7.10a default,human T2 R3,3.87683333333333
+53,STAR 2.7.10a default,human T3 R2,3.60716666666667
+54,STAR 2.7.10a default,human T3 R3,2.44866666666667
+55,STAR 2.7.10a default,malaria T1 R2,1.61333333333333
+56,STAR 2.7.10a default,malaria T1 R3,1.7195
+57,STAR 2.7.10a default,malaria T2 R2,5.37133333333333
+58,STAR 2.7.10a default,malaria T2 R3,5.76783333333333
+59,STAR 2.7.10a default,malaria T3 R2,35.33
+60,STAR 2.7.10a default,malaria T3 R3,35.5723333333333
+233,STAR 2.7.10a default,human T1 R1,1.15283333333333
+234,STAR 2.7.10a default,human T2 R1,1.51216666666667
+235,STAR 2.7.10a default,human T3 R1,2.58266666666667
+236,STAR 2.7.10a default,malaria T1 R1,1.776
+237,STAR 2.7.10a default,malaria T2 R1,5.85666666666667
+238,STAR 2.7.10a default,malaria T3 R1,38.361
+61,Subjunc 2.0.1 default,human T1 R2,9.14166666666667
+62,Subjunc 2.0.1 default,human T1 R3,9.72266666666667
+63,Subjunc 2.0.1 default,human T2 R2,9.32883333333333
+64,Subjunc 2.0.1 default,human T2 R3,9.195
+65,Subjunc 2.0.1 default,human T3 R2,9.2295
+66,Subjunc 2.0.1 default,human T3 R3,9.22666666666667
+67,Subjunc 2.0.1 default,malaria T1 R2,7.63016666666667
+68,Subjunc 2.0.1 default,malaria T1 R3,7.73583333333333
+69,Subjunc 2.0.1 default,malaria T2 R2,7.76616666666667
+70,Subjunc 2.0.1 default,malaria T2 R3,7.7065
+71,Subjunc 2.0.1 default,malaria T3 R2,8.06466666666667
+72,Subjunc 2.0.1 default,malaria T3 R3,8.098
+305,Subjunc 2.0.1 default,human T1 R1,10.0501666666667
+306,Subjunc 2.0.1 default,human T2 R1,10.1336666666667
+307,Subjunc 2.0.1 default,human T3 R1,10.1588333333333
+308,Subjunc 2.0.1 default,malaria T1 R1,8.26933333333333
+309,Subjunc 2.0.1 default,malaria T2 R1,8.36166666666667
+310,Subjunc 2.0.1 default,malaria T3 R1,8.661
+73,novoSplice 0.8.4 default,human T1 R2,9.40933333333333
+74,novoSplice 0.8.4 default,human T1 R3,9.4515
+75,novoSplice 0.8.4 default,human T2 R2,9.995
+76,novoSplice 0.8.4 default,human T2 R3,9.97666666666667
+77,novoSplice 0.8.4 default,human T3 R2,12.9891666666667
+78,novoSplice 0.8.4 default,human T3 R3,13.3365
+79,novoSplice 0.8.4 default,malaria T1 R2,7.4105
+80,novoSplice 0.8.4 default,malaria T1 R3,7.47733333333333
+81,novoSplice 0.8.4 default,malaria T2 R2,8.03533333333333
+82,novoSplice 0.8.4 default,malaria T2 R3,8.46216666666667
+83,novoSplice 0.8.4 default,malaria T3 R2,12.4065
+84,novoSplice 0.8.4 default,malaria T3 R3,12.5595
+311,novoSplice 0.8.4 default,human T1 R1,10.8776666666667
+312,novoSplice 0.8.4 default,human T2 R1,11.2923333333333
+313,novoSplice 0.8.4 default,human T3 R1,14.688
+314,novoSplice 0.8.4 default,malaria T1 R1,7.92766666666667
+315,novoSplice 0.8.4 default,malaria T2 R1,8.53216666666667
+316,novoSplice 0.8.4 default,malaria T3 R1,13.4285

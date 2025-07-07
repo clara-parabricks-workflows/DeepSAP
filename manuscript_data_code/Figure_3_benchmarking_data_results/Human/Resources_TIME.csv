@@ -1,0 +1,55 @@
+,Run,Dataset,Time
+1,DRAGEN 4.0.3 default,human T1 R2,6.15516666666667
+2,DRAGEN 4.0.3 default,human T1 R3,5.90283333333333
+3,DRAGEN 4.0.3 default,human T2 R2,6.22083333333333
+4,DRAGEN 4.0.3 default,human T2 R3,5.7855
+5,DRAGEN 4.0.3 default,human T3 R2,6.02
+6,DRAGEN 4.0.3 default,human T3 R3,6.00166666666667
+137,DRAGEN 4.0.3 default,human T1 R1,6.0875
+138,DRAGEN 4.0.3 default,human T2 R1,6.1865
+139,DRAGEN 4.0.3 default,human T3 R1,6.42
+13,DeepSAP MS150,human T1 R2,15.8046666666667
+14,DeepSAP MS150,human T1 R3,15.6401666666667
+15,DeepSAP MS150,human T2 R2,16.2273333333333
+16,DeepSAP MS150,human T2 R3,16.1765
+17,DeepSAP MS150,human T3 R2,18.8365
+18,DeepSAP MS150,human T3 R3,18.5133333333333
+725,DeepSAP MS150,human T1 R1,18.5881666666667
+825,DeepSAP MS150,human T2 R1,18.3478333333333
+925,DeepSAP MS150,human T3 R1,21.3103333333333
+37,HISAT2 2.2.1 default,human T1 R2,1.398
+38,HISAT2 2.2.1 default,human T1 R3,1.40083333333333
+39,HISAT2 2.2.1 default,human T2 R2,1.86083333333333
+40,HISAT2 2.2.1 default,human T2 R3,2.51383333333333
+41,HISAT2 2.2.1 default,human T3 R2,2.52516666666667
+42,HISAT2 2.2.1 default,human T3 R3,2.52916666666667
+209,HISAT2 2.2.1 default,human T1 R1,1.50933333333333
+210,HISAT2 2.2.1 default,human T2 R1,2.0555
+211,HISAT2 2.2.1 default,human T3 R1,2.80133333333333
+49,STAR 2.7.10a default,human T1 R2,1.30216666666667
+50,STAR 2.7.10a default,human T1 R3,1.32316666666667
+51,STAR 2.7.10a default,human T2 R2,2.10683333333333
+52,STAR 2.7.10a default,human T2 R3,3.87683333333333
+53,STAR 2.7.10a default,human T3 R2,3.60716666666667
+54,STAR 2.7.10a default,human T3 R3,2.44866666666667
+233,STAR 2.7.10a default,human T1 R1,1.15283333333333
+234,STAR 2.7.10a default,human T2 R1,1.51216666666667
+235,STAR 2.7.10a default,human T3 R1,2.58266666666667
+61,Subjunc 2.0.1 default,human T1 R2,9.14166666666667
+62,Subjunc 2.0.1 default,human T1 R3,9.72266666666667
+63,Subjunc 2.0.1 default,human T2 R2,9.32883333333333
+64,Subjunc 2.0.1 default,human T2 R3,9.195
+65,Subjunc 2.0.1 default,human T3 R2,9.2295
+66,Subjunc 2.0.1 default,human T3 R3,9.22666666666667
+305,Subjunc 2.0.1 default,human T1 R1,10.0501666666667
+306,Subjunc 2.0.1 default,human T2 R1,10.1336666666667
+307,Subjunc 2.0.1 default,human T3 R1,10.1588333333333
+73,novoSplice 0.8.4 default,human T1 R2,9.40933333333333
+74,novoSplice 0.8.4 default,human T1 R3,9.4515
+75,novoSplice 0.8.4 default,human T2 R2,9.995
+76,novoSplice 0.8.4 default,human T2 R3,9.97666666666667
+77,novoSplice 0.8.4 default,human T3 R2,12.9891666666667
+78,novoSplice 0.8.4 default,human T3 R3,13.3365
+311,novoSplice 0.8.4 default,human T1 R1,10.8776666666667
+312,novoSplice 0.8.4 default,human T2 R1,11.2923333333333
+313,novoSplice 0.8.4 default,human T3 R1,14.688
