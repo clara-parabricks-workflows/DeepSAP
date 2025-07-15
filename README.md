@@ -10,7 +10,6 @@ For additional resources, including data, detailed analyses, and other supplemen
 
 ## Table of Contents
 - [Requirements](#requirements)
-<!-- - [Installation](#installation) -->
 - [Usage](#usage)
 - [Command-line Arguments](#command-line-arguments)
 - [Version History](#version-history)
@@ -26,15 +25,15 @@ For additional resources, including data, detailed analyses, and other supplemen
 * **Note on GPU VRAM:** The VRAM requirement is highly dependent on two key parameters:
     * **`--batch`**: Larger batch sizes significantly improve throughput but require more GPU memory.
     * **`--fp16`**: Using half-precision floating-point (`--fp16`, enabled by default) dramatically reduces VRAM usage by nearly half and speeds up computation on compatible GPUs. To disable this feature, add the `--no-fp16` flag to your command.
-* The VRAM usage estimates below assume `--fp16` is enabled. Disabling this flag will approximately double the memory requirement for any given batch size.
+    * The VRAM usage estimates below assume `--fp16` is enabled. Disabling this flag will approximately double the memory requirement for any given batch size.
 
-| **Batch Size (`--batch`)** | **Approximate VRAM Usage (with --fp16)** |
-| :------------------------- | :--------------------------------------- |
-| 64                         | ~1.2 GB                                  |
-| 128                        | ~1.6 GB                                  |
-| 256                        | ~2.2 GB                                  |
-| 2048                       | ~10.4 GB                                 |
-| 8192                       | ~39.5 GB                                 |
+    | **Batch Size (`--batch`)** | **Approximate VRAM Usage (with --fp16)** |
+    | :------------------------- | :--------------------------------------- |
+    | 64                         | ~1.2 GB                                  |
+    | 128                        | ~1.6 GB                                  |
+    | 256                        | ~2.2 GB                                  |
+    | 2048                       | ~10.4 GB                                 |
+    | 8192                       | ~39.5 GB                                 |
 
 **Input Data:**
 * RNA-seq reads in FASTQ format.
@@ -171,6 +170,7 @@ Signal  Forward  Reverse  Percentage
 [2025-07-15 16:20:10]   [LOG]   Number of processed reads IDs: 1421  11.24% 
 [2025-07-15 16:20:11]   [LOG]   Finished successfuly
 ```
+<br>
 
 <!-- 3- Running DeepSAP with an alignment BAM file generated from short-read RNA-seq data.
 
@@ -206,12 +206,13 @@ $docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --
 | `--score_reads`   | Classify also reads using the transformer model and add scores to SAM, as appose to only SJ          | No             |
 | `--n_reads`       | Number of reads to classify if `--score_reads` is used                                               | No             |
 ---------------------------------------------------------------------------------------------------------------------------------------------
+<br>
 
 ## Version History
 ### v0.0.2
-- Updated GSNAP aligner to version `2025-04-19`.
+* Updated GSNAP aligner to version `2025-04-19`.
 ### v0.0.1
-- Initial release.
+* Initial release.
 
 ## License/Terms of Use
 By pulling and using the Parabricks container, you accept the governing terms: The software and materials are governed by the NVIDIA Software License Agreement (found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and the Product-Specific Terms for NVIDIA AI Products (found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/); except for the model which is governed by the NVIDIA Models Community License Agreement(found at NVIDIA Community Model License). ADDITIONAL INFORMATION: Apache 2.0.
