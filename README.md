@@ -18,48 +18,58 @@ For additional resources, including data, detailed analyses, and other supplemen
 
 ## Requirements
 * Docker with GPU support
-* **System Hardware:**
-  * **CPU:** 8 cores or more recommended.
-  * **System RAM:** 32 GB minimum for human genome-sized references.
-  * **GPU VRAM:** 16 GB minimum.
-  * **Note on GPU VRAM:** The VRAM requirement is highly dependent on two key parameters:
+**System Hardware:**
+* **CPU:** 8 cores or more recommended.
+* **System RAM:** 32 GB minimum for human genome-sized references.
+**GPU Hardware:**
+* **VRAM:** 16 GB minimum.
+* **Note on GPU VRAM:** The VRAM requirement is highly dependent on two key parameters:
     * **`--batch`**: Larger batch sizes significantly improve throughput but require more GPU memory.
     * **`--fp16`**: Using half-precision floating-point (`--fp16`, enabled by default) dramatically reduces VRAM usage by nearly half and speeds up computation on compatible GPUs. To disable this feature, add the `--no-fp16` flag to your command.
-  * The VRAM usage estimates below assume `--fp16` is enabled. Disabling this flag will approximately double the memory requirement for any given batch size.
+* The VRAM usage estimates below assume `--fp16` is enabled. Disabling this flag will approximately double the memory requirement for any given batch size.
 
-    | **Batch Size (`--batch`)** | **Approximate VRAM Usage (with --fp16)** |
-    | :------------------------- | :--------------------------------------- |
-    | 64                         | ~1.2 GB                                  |
-    | 128                        | ~1.6 GB                                  |
-    | 256                        | ~2.2 GB                                  |
-    | 2048                       | ~10.4 GB                                 |
-    | 8192                       | ~39.5 GB                                 |
+| **Batch Size (`--batch`)** | **Approximate VRAM Usage (with --fp16)** |
+| :------------------------- | :--------------------------------------- |
+| 64                         | ~1.2 GB                                  |
+| 128                        | ~1.6 GB                                  |
+| 256                        | ~2.2 GB                                  |
+| 2048                       | ~10.4 GB                                 |
+| 8192                       | ~39.5 GB                                 |
 
-* **Input Data:**
-  * RNA-seq reads in FASTQ format.
-  * Reference file in FASTA format.
-  * Annotation file in GTF format.
-  * Optionally, a path to a GSNAP index.
+**Input Data:**
+* RNA-seq reads in FASTQ format.
+* Reference file in FASTA format.
+* Annotation file in GTF format.
+* Optionally, a path to a GSNAP index.
 
-## Installation
+<!-- ## Installation
 To use DeepSAP, you must have Docker with GPU support enabled and make sure the DeepSAP Docker image is available on your system. You can obtain the image by running the following command:
 ```bash
 $ docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
-```
+``` -->
 
 ## Usage
-You can use the accompanied dataset named **`malaria_short_pe`** under the [`test`](test/) folder to test DeepSAP's functionality with minimal setup. This dataset includes:
+You can use the accompanied dataset named **`malaria_short_pe`** under the [**`test`**](https://github.com/clara-parabricks-workflows/DeepSAP/tree/main/test) folder in DeepSAP GitHub repository to test DeepSAP's functionality with minimal setup. 
 
-- Paired-end RNA-seq FASTQ files for alignment. 
-- Malaria reference genome in FASTA format.
-- Malaria annotation file in GTF format.
-
-Update the paths in the provided example commands to point to the files in the [`test`](test/) folder.
-
-1- Running DeepSAP with short-read RNA-seq FASTQ files
+### Downloading test dataset and running DeepSAP with short-read RNA-seq FASTQ files
 
 ```bash
-docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
+# 1. Create the target directory for data
+mkdir -p test/malaria_short_pe/
+
+# 2. Download reference genome and annotation files
+wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf
+wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
+
+# 3. Download downsampled FASTQ sequence reads (10K) from DeepSAP GitHub
+wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/SRR14793977_10K_1.fastq.gz
+wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/SRR14793977_10K_2.fastq.gz
+
+# 4. Pull the DeepSAP Parabricks Docker image
+docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
+
+# 5. Run DeepSAP with the test dataset (GSNAP index will be generated)
+docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm              \
     --volume $(pwd)/test:/workdir                                                   \
     --volume $(pwd)/test/outputdir:/outputdir                                       \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
@@ -71,10 +81,12 @@ docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
 ```
 
-2- Running DeepSAP with short-read RNA-seq FASTQ files and GSNAP index.
+### Running DeepSAP with short-read RNA-seq FASTQ files with pre-generated GSNAP index
+If you have already generated a GSNAP index (e.g., from a previous DeepSAP run or a separate gmap_build command), you can provide its path using the --gsnap_idx parameter. This will instruct DeepSAP to reuse the existing index instead of generating a new index.
 
 ```bash
-docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
+# Run DeepSAP with the test dataset and pre-generated GSNAP index
+docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm              \
     --volume $(pwd)/test:/workdir                                                   \
     --volume $(pwd)/test/outputdir:/outputdir                                       \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
@@ -85,6 +97,79 @@ docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm   \
     --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa\
     --gsnap_idx /outputdir/gsnap_idx/
+```
+### DeepSAP expected output
+```
+[2025-07-15 16:19:48]   [LOG]   Parsing FASTA file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa'
+[2025-07-15 16:19:49]   [LOG]   Parsing GTF file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf'
+[2025-07-15 16:19:51]   [LOG]   Transcript information: 
+Number of transcripts:             5767
+Shortest transcript:               67   EPT00050203058
+Longest transcript:                30863        CAG25094
+Transcripts length mean:           2456.79
+Transcripts length median:         1618
+Transcripts length mode:           71
+Shortest intron:                   1    PF3D7_1478200: 14__-__3219919__3220323 -> 14__-__3220325__3220534
+Longest intron:                    2425 CZU00099: 14__+__1639681__1639728 -> 14__+__1642154__1642455
+Introns length mean:               163.03
+Introns length median:             141.0
+Introns length mode:               1
+Number of multi exons transcripts: 3064 53.13%
+Number of mono exon transcripts:   2703 46.87%
+
+Type of transcripts:
+              BioType  Count  Percentage
+0      protein_coding   5358       92.91
+1          pseudogene    153        2.65
+3               ncRNA    102        1.77
+4                tRNA     79        1.37
+5                rRNA     44        0.76
+7                sRNA     17        0.29
+6               snRNA     10        0.17
+2  nontranslating_CDS      4        0.07
+
+[2025-07-15 16:19:51]   [LOG]   Collecting splice junctions from GTF
+[2025-07-15 16:19:51]   [LOG]   Collecting splice junctions in mode=NotStrict and window=150
+[2025-07-15 16:19:51]   [LOG]   Collecting splice junctions from transcript types: All
+Number of duplicated junctions:        328
+Number of short junctions (intron):    0
+Number of short junctions (donor):     0
+Number of short junctions (acceptor):  0
+Number of junctions contains N:        0
+Number of accepted junctions:          8764
+The First 10 Splicing Signals Types: 
+Signal  Forward  Reverse  Percentage
+  GTAG     4096     4431       97.30
+  AAAA       18       17        0.40
+  TATA       12        8        0.23
+  GCAG        9        9        0.21
+  TTTT        6        9        0.17
+  ATAT        4        7        0.13
+  GAGA        5        6        0.13
+  AGAG        3        6        0.10
+  TATT        3        6        0.10
+  TAAT        4        5        0.10
+  
+[2025-07-15 16:19:52]   [LOG]   Collecting splice junctions from SAM/BAM /outputdir/test_run_10K_gsnap.bam
+[2025-07-15 16:19:53]   [LOG]   Collecting splice junctions from SAM/BAM file: /outputdir/test_run_10K_gsnap.bam
+[2025-07-15 16:19:53]   [INFO]  Sense junctions 537
+[2025-07-15 16:19:53]   [INFO]  Antisense junctions 558
+[2025-07-15 16:19:53]   [INFO]  Total number of reads 20511
+[2025-07-15 16:19:53]   [INFO]  Total number of spliced reads 2289 11.159865438057627%
+[2025-07-15 16:19:53]   [LOG]   Finished parsing a SAM file, len(found_junctions_table)= 1095
+[2025-07-15 16:19:54]   [LOG]   Generating splice-junction prediction dataset batch: 1
+[2025-07-15 16:19:54]   [LOG]   Writting dev.csv file for predicting into /outputdir/prediction_batch_1/
+[2025-07-15 16:19:54]   [LOG]   dev.csv file contains:   0: 1095, 1: 1095
+[2025-07-15 16:19:54]   [LOG]   Predicting found splice junctions using DNABERT MS150
+100%|██████████| 69/69 [00:05<00:00, 12.31it/s]
+[2025-07-15 16:20:05]   [LOG]   Generating genome regions 
+[2025-07-15 16:20:05]   [LOG]   Parsing FASTA file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa'
+[2025-07-15 16:20:09]   [LOG]   Creating new sam files
+[2025-07-15 16:20:10]   [LOG]   Finished writing BAM successfully into /outputdir///test_run_10K.bam
+[2025-07-15 16:20:10]   [LOG]   Number of SAM records: 20511 
+[2025-07-15 16:20:10]   [LOG]   Number of reads IDs:   12647 
+[2025-07-15 16:20:10]   [LOG]   Number of processed reads IDs: 1421  11.24% 
+[2025-07-15 16:20:11]   [LOG]   Finished successfuly
 ```
 
 <!-- 3- Running DeepSAP with an alignment BAM file generated from short-read RNA-seq data.
@@ -120,15 +205,13 @@ $docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --
 | `-t, --threads`   | Number of threads                                                                                    | No             |
 | `--score_reads`   | Classify also reads using the transformer model and add scores to SAM, as appose to only SJ          | No             |
 | `--n_reads`       | Number of reads to classify if `--score_reads` is used                                               | No             |
----
+---------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Version History
 ### v0.0.2
-* Updated GSNAP aligner to version `2025-04-19`.
-
+- Updated GSNAP aligner to version `2025-04-19`.
 ### v0.0.1
-* Initial release.
-
+- Initial release.
 
 ## License/Terms of Use
 By pulling and using the Parabricks container, you accept the governing terms: The software and materials are governed by the NVIDIA Software License Agreement (found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and the Product-Specific Terms for NVIDIA AI Products (found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/); except for the model which is governed by the NVIDIA Models Community License Agreement(found at NVIDIA Community Model License). ADDITIONAL INFORMATION: Apache 2.0.
