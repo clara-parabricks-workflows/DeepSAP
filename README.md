@@ -48,26 +48,32 @@ $ docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
 ``` -->
 
 ## Usage
-You can use the accompanied dataset named **`malaria_short_pe`** under the [**`test`**](https://github.com/clara-parabricks-workflows/DeepSAP/tree/main/test) folder in DeepSAP GitHub repository to test DeepSAP's functionality with minimal setup. 
+This guide demonstrates how to quickly test DeepSAP's functionality using the **`malaria_short_pe`** under the [**`test`**](https://github.com/clara-parabricks-workflows/DeepSAP/tree/main/test). Follow these steps to set up your environment and run DeepSAP:
 
-### Downloading test dataset and running DeepSAP with short-read RNA-seq FASTQ files
+### Step 1: Prepare Environment and Download Test Data
+This step creates the necessary directory structure and downloads all required reference files and test sequencing data.
 
 ```bash
-# 1. Create the target directory for data
+# Create the target directory for data
 mkdir -p test/malaria_short_pe/
 
-# 2. Download reference genome and annotation files
+# Download reference genome and annotation files
 wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf
 wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
 
-# 3. Download downsampled FASTQ sequence reads (10K) from DeepSAP GitHub
+# Download downsampled FASTQ sequence reads (10K) from DeepSAP GitHub
 wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/SRR14793977_10K_1.fastq.gz
 wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/SRR14793977_10K_2.fastq.gz
 
-# 4. Pull the DeepSAP Parabricks Docker image
+# Pull the DeepSAP Parabricks Docker image
 docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
+```
 
-# 5. Run DeepSAP with the test dataset (GSNAP index will be generated)
+### Step 2: Run DeepSAP (Initial Run - Index Generation)
+This command executes DeepSAP with the downloaded test dataset. Since the `--gsnap_idx` parameter is not specified, DeepSAP will automatically generate the GSNAP index required for alignment as part of this run.
+
+```bash
+# Run DeepSAP with the test dataset (GSNAP index will be generated)
 docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm              \
     --volume $(pwd)/test:/workdir                                                   \
     --volume $(pwd)/test/outputdir:/outputdir                                       \
@@ -80,8 +86,8 @@ docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm          
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
 ```
 
-### Running DeepSAP with short-read RNA-seq FASTQ files with pre-generated GSNAP index
-If you have already generated a GSNAP index (e.g., from a previous DeepSAP run or a separate gmap_build command), you can provide its path using the --gsnap_idx parameter. This will instruct DeepSAP to reuse the existing index instead of generating a new index.
+### Step 3: Run DeepSAP with a Pre-existing GSNAP Index
+If you have already generated a GSNAP index (e.g., from a previous DeepSAP run or a separate `gmap_build` command), you can provide its path using the `--gsnap_idx` parameter. This will instruct DeepSAP to reuse the existing index instead of generating a new one.
 
 ```bash
 # Run DeepSAP with the test dataset and pre-generated GSNAP index
