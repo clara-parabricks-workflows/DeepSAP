@@ -10,7 +10,7 @@ For additional resources, including data, detailed analyses, and other supplemen
 
 ## Table of Contents
 - [Requirements](#requirements)
-- [Installation](#installation)
+<!-- - [Installation](#installation) -->
 - [Usage](#usage)
 - [Command-line Arguments](#command-line-arguments)
 - [Version History](#version-history)
