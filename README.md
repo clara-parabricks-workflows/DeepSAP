@@ -48,14 +48,14 @@ $ docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
 ``` -->
 
 ## Usage
-This guide demonstrates how to quickly test DeepSAP's functionality using the **`malaria_short_pe`** under the [**`test`**](https://github.com/clara-parabricks-workflows/DeepSAP/tree/main/test). Follow these steps to set up your environment and run DeepSAP:
+This guide demonstrates how to quickly test DeepSAP's functionality using the **`malaria_short_pe`** dataset. Follow these steps to set up your environment and run DeepSAP:
 
 ### Step 1: Prepare Environment and Download Test Data
-This step creates the necessary directory structure and downloads all required reference files and test sequencing data.
+This step downloads the latest DeepSAP Docker container and all required reference files and test sequencing data.
 
 ```bash
-# Create the target directory for data
-mkdir -p test/malaria_short_pe/
+# Pull the DeepSAP Parabricks Docker image
+docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
 
 # Download reference genome and annotation files
 wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf
@@ -64,9 +64,6 @@ wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabrick
 # Download downsampled FASTQ sequence reads (10K) from DeepSAP GitHub
 wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/SRR14793977_10K_1.fastq.gz
 wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/SRR14793977_10K_2.fastq.gz
-
-# Pull the DeepSAP Parabricks Docker image
-docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
 ```
 
 ### Step 2: Run DeepSAP (Initial Run - Index Generation)
@@ -103,7 +100,8 @@ docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm          
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa\
     --gsnap_idx /outputdir/gsnap_idx/
 ```
-### DeepSAP expected output
+
+### DeepSAP Expected Output
 ```
 [2025-07-15 16:19:48]   [LOG]   Parsing FASTA file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa'
 [2025-07-15 16:19:49]   [LOG]   Parsing GTF file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf'
@@ -177,20 +175,6 @@ Signal  Forward  Reverse  Percentage
 [2025-07-15 16:20:11]   [LOG]   Finished successfuly
 ```
 <br>
-
-<!-- 3- Running DeepSAP with an alignment BAM file generated from short-read RNA-seq data.
-
-```bash
-$docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm \
-    --volume $(pwd)/test:/workdir                               \
-    --volume $(pwd)/test/outputdir:/outputdir                   \
-    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest        \
-    --out /outputdir/                                           \
-    --prefix test_run                                           \
-    --sam /workdir/short_read_pe_dataset/alignments.bam         \
-    --fasta /workdir/short_read_pe_dataset/malaria_genome.fa    \
-    --gtf /workdir/short_read_pe_dataset/malaria_annotation.gtf
-``` -->
 
 ## Command-line Arguments
 
