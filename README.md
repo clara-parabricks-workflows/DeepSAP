@@ -124,7 +124,7 @@ $docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --
 
 ## Version History
 ### v0.0.2
-* Updated the bundled GSNAP aligner to version `2025-04-19`.
+* Updated GSNAP aligner to version `2025-04-19`.
 
 ### v0.0.1
 * Initial release.
