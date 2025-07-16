@@ -16,8 +16,9 @@ For additional resources, including data, detailed analyses, and other supplemen
 - [License/Terms of Use](#licenseterms-of-use)
 
 ## Requirements
-* Docker with GPU support
-**System Hardware:**
+### System Software:
+* Docker with GPU support<br>
+### System Hardware:
 * **CPU:** 8 cores or more recommended.
 * **System RAM:** 32 GB minimum for human genome-sized references.
 **GPU Hardware:**
@@ -26,16 +27,15 @@ For additional resources, including data, detailed analyses, and other supplemen
     * **`--batch`**: Larger batch sizes significantly improve throughput but require more GPU memory.
     * **`--fp16`**: Using half-precision floating-point (`--fp16`, enabled by default) dramatically reduces VRAM usage by nearly half and speeds up computation on compatible GPUs. To disable this feature, add the `--no-fp16` flag to your command.
     * The VRAM usage estimates below assume `--fp16` is enabled. Disabling this flag will approximately double the memory requirement for any given batch size.
+        | **Batch Size (`--batch`)** | **Approximate VRAM Usage (with --fp16)** |
+        | :------------------------- | :--------------------------------------- |
+        | 64                         | ~1.2 GB                                  |
+        | 128                        | ~1.6 GB                                  |
+        | 256                        | ~2.2 GB                                  |
+        | 2048                       | ~10.4 GB                                 |
+        | 8192                       | ~39.5 GB                                 |
 
-    | **Batch Size (`--batch`)** | **Approximate VRAM Usage (with --fp16)** |
-    | :------------------------- | :--------------------------------------- |
-    | 64                         | ~1.2 GB                                  |
-    | 128                        | ~1.6 GB                                  |
-    | 256                        | ~2.2 GB                                  |
-    | 2048                       | ~10.4 GB                                 |
-    | 8192                       | ~39.5 GB                                 |
-
-**Input Data:**
+### Input Data:
 * RNA-seq reads in FASTQ format.
 * Reference file in FASTA format.
 * Annotation file in GTF format.
