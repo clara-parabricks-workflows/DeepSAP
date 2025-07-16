@@ -27,7 +27,7 @@ For additional resources, including data, detailed analyses, and other supplemen
     * **`--batch`**: Larger batch sizes significantly improve throughput but require more GPU memory.
     * **`--fp16`**: Using half-precision floating-point (`--fp16`, enabled by default) dramatically reduces VRAM usage by nearly half and speeds up computation on compatible GPUs. To disable this feature, add the `--no-fp16` flag to your command.
     * The VRAM usage estimates below assume `--fp16` is enabled. Disabling this flag will approximately double the memory requirement for any given batch size.
-        | **Batch Size (`--batch`)** | **Approximate VRAM Usage (with --fp16)** |
+        | **Batch Size (`--batch`)** | **Approximate VRAM Usage (with `--fp16`)** |
         | :------------------------- | :--------------------------------------- |
         | 64                         | ~1.2 GB                                  |
         | 128                        | ~1.6 GB                                  |
