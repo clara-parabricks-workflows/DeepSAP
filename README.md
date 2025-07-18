@@ -41,12 +41,6 @@ For additional resources, including data, detailed analyses, and other supplemen
 * Annotation file in GTF format.
 * Optionally, a path to a GSNAP index.
 
-<!-- ## Installation
-To use DeepSAP, you must have Docker with GPU support enabled and make sure the DeepSAP Docker image is available on your system. You can obtain the image by running the following command:
-```bash
-$ docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
-``` -->
-
 ## Usage
 This guide demonstrates how to quickly test DeepSAP's functionality using the **`malaria_short_pe`** dataset. Follow these steps to set up your environment and run DeepSAP:
 
@@ -101,11 +95,28 @@ docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm          
     --gsnap_idx /outputdir/gsnap_idx/
 ```
 
+<!-- ```bash
+# Run DeepSAP with the test dataset and pre-generated GSNAP index
+docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm              \
+    --volume $(pwd)/test:/workdir                                                   \
+    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    nvcr.io/eeatisidcqzm/clara-parabricks-deepsap:v0.0.3                            \
+    --out /outputdir/                                                               \
+    --prefix test_run_human_ERG                                                     \
+    --gtf /workdir/human_ERG_short_pe/chromosome_21.gtf          \
+    --fasta /workdir/human_ERG_short_pe/chromosome_21.fa \
+    --sam /workdir/human_ERG_short_pe/ERG_novel_sj.sam
+``` -->
+
 ### DeepSAP Expected Output
 ```
-[2025-07-15 16:19:48]   [LOG]   Parsing FASTA file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa'
-[2025-07-15 16:19:49]   [LOG]   Parsing GTF file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf'
-[2025-07-15 16:19:51]   [LOG]   Transcript information: 
+[2025-07-18 12:51:27]   [LOG]   Running DeepSAP v0.0.3
+[2025-07-18 12:51:32]   [LOG]   Running GSNAP
+[2025-07-18 12:51:32]   [LOG]   Building GSNAP TGGA index
+[2025-07-18 12:52:44]   [LOG]   Running GSNAP TGGA 
+[2025-07-18 12:52:46]   [LOG]   Parsing FASTA file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa'
+[2025-07-18 12:52:46]   [LOG]   Parsing GTF file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf'
+[2025-07-18 12:52:47]   [LOG]   Transcript information: 
 Number of transcripts:             5767
 Shortest transcript:               67   EPT00050203058
 Longest transcript:                30863        CAG25094
@@ -130,10 +141,9 @@ Type of transcripts:
 7                sRNA     17        0.29
 6               snRNA     10        0.17
 2  nontranslating_CDS      4        0.07
-
-[2025-07-15 16:19:51]   [LOG]   Collecting splice junctions from GTF
-[2025-07-15 16:19:51]   [LOG]   Collecting splice junctions in mode=NotStrict and window=150
-[2025-07-15 16:19:51]   [LOG]   Collecting splice junctions from transcript types: All
+[2025-07-18 12:52:47]   [LOG]   Collecting splice junctions from GTF
+[2025-07-18 12:52:47]   [LOG]   Collecting splice junctions in mode=NotStrict and window=150
+[2025-07-18 12:52:47]   [LOG]   Collecting splice junctions from transcript types: All
 Number of duplicated junctions:        328
 Number of short junctions (intron):    0
 Number of short junctions (donor):     0
@@ -152,27 +162,25 @@ Signal  Forward  Reverse  Percentage
   AGAG        3        6        0.10
   TATT        3        6        0.10
   TAAT        4        5        0.10
-  
-[2025-07-15 16:19:52]   [LOG]   Collecting splice junctions from SAM/BAM /outputdir/test_run_10K_gsnap.bam
-[2025-07-15 16:19:53]   [LOG]   Collecting splice junctions from SAM/BAM file: /outputdir/test_run_10K_gsnap.bam
-[2025-07-15 16:19:53]   [INFO]  Sense junctions 537
-[2025-07-15 16:19:53]   [INFO]  Antisense junctions 558
-[2025-07-15 16:19:53]   [INFO]  Total number of reads 20511
-[2025-07-15 16:19:53]   [INFO]  Total number of spliced reads 2289 11.159865438057627%
-[2025-07-15 16:19:53]   [LOG]   Finished parsing a SAM file, len(found_junctions_table)= 1095
-[2025-07-15 16:19:54]   [LOG]   Generating splice-junction prediction dataset batch: 1
-[2025-07-15 16:19:54]   [LOG]   Writting dev.csv file for predicting into /outputdir/prediction_batch_1/
-[2025-07-15 16:19:54]   [LOG]   dev.csv file contains:   0: 1095, 1: 1095
-[2025-07-15 16:19:54]   [LOG]   Predicting found splice junctions using DNABERT MS150
-100%|██████████| 69/69 [00:05<00:00, 12.31it/s]
-[2025-07-15 16:20:05]   [LOG]   Generating genome regions 
-[2025-07-15 16:20:05]   [LOG]   Parsing FASTA file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa'
-[2025-07-15 16:20:09]   [LOG]   Creating new sam files
-[2025-07-15 16:20:10]   [LOG]   Finished writing BAM successfully into /outputdir///test_run_10K.bam
-[2025-07-15 16:20:10]   [LOG]   Number of SAM records: 20511 
-[2025-07-15 16:20:10]   [LOG]   Number of reads IDs:   12647 
-[2025-07-15 16:20:10]   [LOG]   Number of processed reads IDs: 1421  11.24% 
-[2025-07-15 16:20:11]   [LOG]   Finished successfuly
+[2025-07-18 12:52:47]   [LOG]   Collecting splice junctions from SAM/BAM file '/outputdir/test_run_10K_gsnap.bam'
+[2025-07-18 12:52:47]   [INFO]  Sense junctions 518
+[2025-07-18 12:52:47]   [INFO]  Antisense junctions 551
+[2025-07-18 12:52:47]   [INFO]  Total number of reads 20479
+[2025-07-18 12:52:47]   [INFO]  Total number of spliced reads 2233 10.903852727183946%
+[2025-07-18 12:52:47]   [LOG]   Finished parsing a SAM file, len(found_junctions_table)= 1069
+[2025-07-18 12:52:47]   [LOG]   Generating splice-junction prediction dataset batch: 1
+[2025-07-18 12:52:47]   [LOG]   Writting dev.csv file for predicting into '/outputdir/test_run_10K_prediction_batch_1/'
+[2025-07-18 12:52:47]   [LOG]   dev.csv file contains:   0: 1069, 1: 1069
+[2025-07-18 12:52:47]   [LOG]   Predicting found splice junctions using DNABERT MS150
+100%|██████████| 67/67 [00:01<00:00, 58.23it/s]
+[2025-07-18 12:52:51]   [LOG]   Generating genome regions 
+[2025-07-18 12:52:51]   [LOG]   Parsing FASTA file '/workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa'
+[2025-07-18 12:52:53]   [LOG]   Finished writing BAM successfully into '/outputdir/test_run_10K'
+[2025-07-18 12:52:53]   [LOG]   Number of SAM records: 20479 
+[2025-07-18 12:52:53]   [LOG]   Number of reads IDs:   12644 
+[2025-07-18 12:52:53]   [LOG]   Number of processed reads IDs: 1405  11.11% 
+
+[2025-07-18 12:52:54]   [LOG]   Finished successfuly
 ```
 <br>
 
@@ -199,6 +207,8 @@ Signal  Forward  Reverse  Percentage
 <br>
 
 ## Version History
+### v0.0.3
+* Fixed key error in parsing FASTA files. 
 ### v0.0.2
 * Updated GSNAP aligner to version `2025-04-19`.
 ### v0.0.1
