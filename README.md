@@ -106,6 +106,29 @@ docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm          
     --gtf /workdir/human_ERG_short_pe/chromosome_21.gtf          \
     --fasta /workdir/human_ERG_short_pe/chromosome_21.fa \
     --sam /workdir/human_ERG_short_pe/ERG_novel_sj.sam
+
+docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm              \
+    --volume $(pwd)/test:/workdir                                                   \
+    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    nvcr.io/eeatisidcqzm/clara-parabricks-deepsap:v0.0.3                            \
+    --out /outputdir/                                                               \
+    --prefix test_run_danio                                                     \
+    --gtf /workdir/zebra_fish_short_pe/GCF_000002035.6_GRCz11_genomic.gtf          \
+    --fasta /workdir/zebra_fish_short_pe/GCF_000002035.6_GRCz11_genomic.fna \
+    --mate_1 /workdir/zebra_fish_short_pe/SRR14793977_10K_1.fastq.gz                   \
+    --mate_2 /workdir/zebra_fish_short_pe/SRR14793977_10K_2.fastq.gz
+
+
+docker run --gpus all --ulimit memlock=-1 --ulimit stack=67108864 --rm              \
+    --volume $(pwd)/test:/workdir                                                   \
+    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    nvcr.io/eeatisidcqzm/clara-parabricks-deepsap:v0.0.3                            \
+    --out /outputdir/                                                               \
+    --prefix test_run_human_genecode                                                \
+    --gtf /workdir/human_genecode_short_pe/gencode.v48.annotation.gtf        \
+    --fasta /workdir/human_genecode_short_pe/GRCh38.p14.genome.fa                 \
+    --mate_1 /workdir/human_genecode_short_pe/SRR14793977_10K_1.fastq.gz             \
+    --mate_2 /workdir/human_genecode_short_pe/SRR14793977_10K_2.fastq.gz
 ``` -->
 
 ### DeepSAP Expected Output
@@ -208,7 +231,8 @@ Signal  Forward  Reverse  Percentage
 
 ## Version History
 ### v0.0.3
-* Fixed key error in parsing FASTA files. 
+* Fixed key error in parsing FASTA files.
+* Fixed gene_id pattern error in parsing GTF files. 
 ### v0.0.2
 * Updated GSNAP aligner to version `2025-04-19`.
 ### v0.0.1
