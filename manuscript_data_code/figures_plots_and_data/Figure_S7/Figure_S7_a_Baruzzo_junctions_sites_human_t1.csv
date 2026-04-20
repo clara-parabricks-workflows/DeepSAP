@@ -1,0 +1,19 @@
+"Run","Dataset","RUN_ID","Study","Species","Rate","Replicate","Junctions_both_sites","Junctions_donor_site","Junctions_acceptor_site","Junctions_none"
+"DRAGEN 4.0.3 default","human T1 R1","DRAGEN 4.0.3 default baruzzo_human_t1r1","Baruzzo","human","T1",1,2695845,319,432,2101
+"DRAGEN 4.0.3 default","human T1 R2","DRAGEN 4.0.3 default baruzzo_human_t1r2","Baruzzo","human","T1",2,2693173,333,444,2032
+"DRAGEN 4.0.3 default","human T1 R3","DRAGEN 4.0.3 default baruzzo_human_t1r3","Baruzzo","human","T1",3,2696119,347,417,1978
+"DeepSAP MS150","human T1 R1","DeepSAP v0.0.1 MS150 baruzzo_human_t1r1","Baruzzo","human","T1",1,2868260,225,275,5170
+"DeepSAP MS150","human T1 R2","DeepSAP v0.0.1 MS150 baruzzo_human_t1r2","Baruzzo","human","T1",2,2865142,274,337,5400
+"DeepSAP MS150","human T1 R3","DeepSAP v0.0.1 MS150 baruzzo_human_t1r3","Baruzzo","human","T1",3,2867836,323,249,5228
+"HISAT2 2.2.1 default","human T1 R1","HISAT2 2.2.1 default baruzzo_human_t1r1","Baruzzo","human","T1",1,2777742,687,772,12607
+"HISAT2 2.2.1 default","human T1 R2","HISAT2 2.2.1 default baruzzo_human_t1r2","Baruzzo","human","T1",2,2774841,670,712,12464
+"HISAT2 2.2.1 default","human T1 R3","HISAT2 2.2.1 default baruzzo_human_t1r3","Baruzzo","human","T1",3,2779091,606,818,12443
+"STAR 2.7.10a default","human T1 R1","STAR 2.7.10a default baruzzo_human_t1r1","Baruzzo","human","T1",1,2703673,270,412,1613
+"STAR 2.7.10a default","human T1 R2","STAR 2.7.10a default baruzzo_human_t1r2","Baruzzo","human","T1",2,2700973,286,267,1494
+"STAR 2.7.10a default","human T1 R3","STAR 2.7.10a default baruzzo_human_t1r3","Baruzzo","human","T1",3,2705185,291,221,1437
+"Subjunc 2.0.1 default","human T1 R1","Subjunc 2.0.1 default baruzzo_human_t1r1","Baruzzo","human","T1",1,2789274,1528,1271,23784
+"Subjunc 2.0.1 default","human T1 R2","Subjunc 2.0.1 default baruzzo_human_t1r2","Baruzzo","human","T1",2,2787308,1495,1242,23979
+"Subjunc 2.0.1 default","human T1 R3","Subjunc 2.0.1 default baruzzo_human_t1r3","Baruzzo","human","T1",3,2791253,1444,1245,23651
+"novoSplice 0.8.4 default","human T1 R1","novoSplice 0.8.4 default baruzzo_human_t1r1","Baruzzo","human","T1",1,2636891,70,94,37
+"novoSplice 0.8.4 default","human T1 R2","novoSplice 0.8.4 default baruzzo_human_t1r2","Baruzzo","human","T1",2,2634741,60,69,47
+"novoSplice 0.8.4 default","human T1 R3","novoSplice 0.8.4 default baruzzo_human_t1r3","Baruzzo","human","T1",3,2638146,26,61,48

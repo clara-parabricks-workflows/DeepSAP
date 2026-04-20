@@ -1,0 +1,7 @@
+"Run","Dataset","RUN_ID","Study","Species","Rate","Replicate","TP_splice","FN_splice","FP_splice"
+"DRAGEN 4.0.3 default","human T3 R1","DRAGEN 4.0.3 default SimBA_human_t3","SimBA","human","T3",1,55701,1287,921
+"DeepSAP MS150","human T3 R1","DeepSAP v0.0.1 MS150 SimBA_human_t3","SimBA","human","T3",1,56363,625,1134
+"HISAT2 2.2.1 default","human T3 R1","HISAT2 2.2.1 default SimBA_human_t3","SimBA","human","T3",1,55729,1259,5165
+"STAR 2.7.10a default","human T3 R1","STAR 2.7.10a default SimBA_human_t3","SimBA","human","T3",1,55574,1414,1529
+"Subjunc 2.0.1 default","human T3 R1","Subjunc 2.0.1 default SimBA_human_t3","SimBA","human","T3",1,56046,942,5404
+"novoSplice 0.8.4 default","human T3 R1","novoSplice 0.8.4 default SimBA_human_t3","SimBA","human","T3",1,56155,833,712

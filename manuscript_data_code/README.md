@@ -16,17 +16,9 @@ This repository contains the data, figures, and scripts used in the **DeepSAP ma
 ## **Repository Structure**
 Below is an overview of the repository structure and its contents:
 
-### **DeepSAP Figures**
-📂 `DeepSAP Manuscript and Figures`
-- **DeepSAP.pdf** - DeepSAP manuscript.
-- **DeepSAP-main-figures.pdf** - Main figures from the DeepSAP manuscript.
-- **DeepSAP-supplemental-figures-tables.pdf** - Supplemental figures and tables included in the manuscript.
-- **DeepSAP-main-figures-wot-legends.pdf** - Main figures in a simplified format.
-- **DeepSAP-supplemental-figures-wot-legends.pdf** - Supplemental figures in a simplified format.
-
 ### **Figure 2 - Dataset for Fine-Tuning & Evaluation**
 📂 `Figure_2_dataset_for_fine-tuning_evaluation/`
-- Contains datasets and scripts for **fine-tuning and evaluating** DeepSAP transformer models shown in Fig. 2 and Fig. 2S.
+- Contains datasets and scripts for **fine-tuning and evaluating** DeepSAP transformer models shown in Fig. 2 and Figs. S1–S4.
 - **Key folders and files**:
   - `tune_transformers.html` - HTML Notebook for fine-tuning transformers.
   - `visulize_models.html` - HTML notebook for visualization of models performance.
@@ -40,17 +32,17 @@ Below is an overview of the repository structure and its contents:
 
 ### **Figure 3 - Benchmarking Data & Results**
 📂 `Figure_3_benchmarking_data_results/`
-- Contains **benchmarking results** for Baruzzo and SimBA datasets shown in Fig. 3,  Fig. 3S and Fig. 6S.
+- Contains **benchmarking results** for Baruzzo and SimBA datasets shown in Fig. 3, Fig. S5, Fig. S6, Fig. S7, Fig. S10 and Fig. S11.
 - **Key folders and files**:
   - `All/`, `Human/`, `Malaria/` - Benchmarking .png and .csv files for Human only datasets, Malaria only datasets and Humand & Malaria datasets.
   - `Nextflow.md` - Documentation for Nextflow pipeline.
   - `results.csv` - Table with benchmarking results produced by the Nextflow pipeline.
-  - `statistical_testing_per-read-pair` - Jupyter notebookd of the per-read-pair statistical analysis in Fig 3d.
-  - `statistical_testing_boostrapping` - Jupyter notebookd of the boostrappin analysis in Fig 6S.
+  - `statistical_testing_per-read-pair` - Jupyter notebookd of the per-read-pair statistical analysis in Fig. S5B.
+  - `statistical_testing_boostrapping` - Jupyter notebookd of the boostrappin analysis in Fig. S5A.
 
 ### **Figure 4 - Splice Junction Scatter Plots (Baruzzo Datasets)**
 📂 `Figure_4_sj_scatter_plots_from_counts_baruzzo_datasets/`
-- Contains splice junction scatter plots for **Comparing DeepSAP with other aligners in Baruzzo datasets** shown in Fig. 4 and Fig. 4S.
+- Contains splice junction scatter plots for **Comparing DeepSAP with other aligners in Baruzzo datasets** shown in Fig. 4 and Fig. S8.
 - **Key folders and files**:
   - `workflow_generating_scatter_plots_baruzzo.html` - Steps for generating scatter plots for Baruzzo Human T1, T2 and T3 datasets.
   - `counts/` - Splice junctions counts from featureCount per Baruzzo dataset.
@@ -60,7 +52,7 @@ Below is an overview of the repository structure and its contents:
 
 ### **Figure 5 - Splice Junction Scatter Plots (Real Datasets)**
 📂 `Figure_5_sj_scatter_plots_from_counts_real_datasets/`
-- Contains splice junction scatter plots for **Comparing DeepSAP with other aligners in real datasets** shown in Fig. 5 and Fig. 5S.
+- Contains splice junction scatter plots for **Comparing DeepSAP with other aligners in real datasets** shown in Fig. 5 and Fig. S9.
 - **Key folders and files**:
   - `workflow_generating_scatter_plots_real.html` - Workflow documentation to generate the plots. 
   - `SRR5280319/` - FeatureCounts results for the dataset SRR5280319 used for analysis. Splice junctions counts are stored in zipped file pHGG_SRR5280319_counts_all_MAPQ0.jcounts.zip (MAPQ0 means here that all reads are allowed to be counted depsite the MAPQ)
@@ -78,6 +70,4 @@ Below is an overview of the repository structure and its contents:
 - High-quality **PDF versions** of the manuscript figures.
 - **Key files**:
   - `Figure_1.pdf`, ..., `Figure_6.pdf` - Main figures.
-  - `Figure_1S.pdf`, ..., `Figure_5S.pdf` - Supplemental figures.
-  - `Plain_Main_Figures.pdf` - All main figures in a single file.
-  - `Plain_Supplemental_Figures.pdf` - All supplemental figures in a single file.
+  - `Figure_S1.pdf`, ..., `Figure_S11.pdf` - Supplemental figures.

@@ -1,0 +1,19 @@
+"Run","Dataset","RUN_ID","Study","Species","Rate","Replicate","Junctions_both_sites","Junctions_donor_site","Junctions_acceptor_site","Junctions_none"
+"DRAGEN 4.0.3 default","malaria T1 R1","DRAGEN 4.0.3 default baruzzo_malaria_t1r1","Baruzzo","malaria","T1",1,875731,2,12,99
+"DRAGEN 4.0.3 default","malaria T1 R2","DRAGEN 4.0.3 default baruzzo_malaria_t1r2","Baruzzo","malaria","T1",2,876072,7,28,100
+"DRAGEN 4.0.3 default","malaria T1 R3","DRAGEN 4.0.3 default baruzzo_malaria_t1r3","Baruzzo","malaria","T1",3,874044,4,4,105
+"DeepSAP MS150","malaria T1 R1","DeepSAP v0.0.1 MS150 baruzzo_malaria_t1r1","Baruzzo","malaria","T1",1,950460,9,1,1056
+"DeepSAP MS150","malaria T1 R2","DeepSAP v0.0.1 MS150 baruzzo_malaria_t1r2","Baruzzo","malaria","T1",2,949844,7,5,993
+"DeepSAP MS150","malaria T1 R3","DeepSAP v0.0.1 MS150 baruzzo_malaria_t1r3","Baruzzo","malaria","T1",3,947487,16,2,1006
+"HISAT2 2.2.1 default","malaria T1 R1","HISAT2 2.2.1 default baruzzo_malaria_t1r1","Baruzzo","malaria","T1",1,907572,128,103,22897
+"HISAT2 2.2.1 default","malaria T1 R2","HISAT2 2.2.1 default baruzzo_malaria_t1r2","Baruzzo","malaria","T1",2,911238,8,96,20643
+"HISAT2 2.2.1 default","malaria T1 R3","HISAT2 2.2.1 default baruzzo_malaria_t1r3","Baruzzo","malaria","T1",3,908316,10,56,22647
+"STAR 2.7.10a default","malaria T1 R1","STAR 2.7.10a default baruzzo_malaria_t1r1","Baruzzo","malaria","T1",1,900157,49,43,2970
+"STAR 2.7.10a default","malaria T1 R2","STAR 2.7.10a default baruzzo_malaria_t1r2","Baruzzo","malaria","T1",2,900268,42,268,3075
+"STAR 2.7.10a default","malaria T1 R3","STAR 2.7.10a default baruzzo_malaria_t1r3","Baruzzo","malaria","T1",3,898727,39,23,2691
+"Subjunc 2.0.1 default","malaria T1 R1","Subjunc 2.0.1 default baruzzo_malaria_t1r1","Baruzzo","malaria","T1",1,934750,210,65,73489
+"Subjunc 2.0.1 default","malaria T1 R2","Subjunc 2.0.1 default baruzzo_malaria_t1r2","Baruzzo","malaria","T1",2,936912,231,59,73604
+"Subjunc 2.0.1 default","malaria T1 R3","Subjunc 2.0.1 default baruzzo_malaria_t1r3","Baruzzo","malaria","T1",3,936735,157,208,72947
+"novoSplice 0.8.4 default","malaria T1 R1","novoSplice 0.8.4 default baruzzo_malaria_t1r1","Baruzzo","malaria","T1",1,894265,0,0,0
+"novoSplice 0.8.4 default","malaria T1 R2","novoSplice 0.8.4 default baruzzo_malaria_t1r2","Baruzzo","malaria","T1",2,893685,0,0,0
+"novoSplice 0.8.4 default","malaria T1 R3","novoSplice 0.8.4 default baruzzo_malaria_t1r3","Baruzzo","malaria","T1",3,891468,16,1,5

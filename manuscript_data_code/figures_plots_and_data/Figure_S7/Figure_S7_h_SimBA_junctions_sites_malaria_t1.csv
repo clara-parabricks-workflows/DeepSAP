@@ -1,0 +1,7 @@
+"Run","Dataset","RUN_ID","Study","Species","Rate","Replicate","TP_splice","FN_splice","FP_splice"
+"DRAGEN 4.0.3 default","malaria T1 R1","DRAGEN 4.0.3 default SimBA_malaria_t1","SimBA","malaria","T1",1,8437,95,406
+"DeepSAP MS150","malaria T1 R1","DeepSAP v0.0.1 MS150 SimBA_malaria_t1","SimBA","malaria","T1",1,8499,33,148
+"HISAT2 2.2.1 default","malaria T1 R1","HISAT2 2.2.1 default SimBA_malaria_t1","SimBA","malaria","T1",1,8505,27,1251
+"STAR 2.7.10a default","malaria T1 R1","STAR 2.7.10a default SimBA_malaria_t1","SimBA","malaria","T1",1,8469,63,2620
+"Subjunc 2.0.1 default","malaria T1 R1","Subjunc 2.0.1 default SimBA_malaria_t1","SimBA","malaria","T1",1,8519,13,15621
+"novoSplice 0.8.4 default","malaria T1 R1","novoSplice 0.8.4 default SimBA_malaria_t1","SimBA","malaria","T1",1,8488,44,35
