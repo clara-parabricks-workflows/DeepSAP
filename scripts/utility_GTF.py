@@ -461,6 +461,7 @@ def collect_junctions_sequences_from_GTF(genome_fasta: Fasta,
                 donor_end      = exon_1.end
                 acceptor_start = exon_2.start - 1
                 acceptor_end   = exon_2.end
+                junction_id    = chrom + "__" + strand + "__" + str(donor_end) + "__" + str(acceptor_start)
                 
                 donor_sequence_start = donor_end - w 
                 donor_sequence_end  = donor_end + w 
@@ -561,8 +562,6 @@ def collect_junctions_sequences_from_GTF(genome_fasta: Fasta,
                 # Generate kmers from sequences          
                 donor_ID    = exon_1.ID
                 acceptor_ID = exon_2.ID
-                
-                junction_id = chrom + "__" + strand + "__" + str(donor_end) + "__" + str(acceptor_start)
                 
                 transcript.junctions.append(junction_id)
                     

@@ -37,14 +37,37 @@ import concurrent.futures
 import shutil
 import gc
 import re 
-from cryptography.fernet import Fernet
-import tarfile
-import re
+import pysam
+from pyfaidx import Fasta
+
+
+def _make_tool_help_action(tool_name: str) -> type:
+    """Factory: argparse Action that prints '<tool_name> --help' and exits.
+
+    Lets users discover GSNAP / gmap_build flags via DeepSAP.py's CLI without
+    leaving the wrapper. The action runs before argparse validates required
+    args, so e.g. `DeepSAP.py --gsnap-help` works without supplying -o/-f/etc.
+    """
+    class _ToolHelpAction(argparse.Action):
+        def __init__(self, option_strings, dest=argparse.SUPPRESS,
+                     default=argparse.SUPPRESS, help=None):
+            super().__init__(option_strings=option_strings, dest=dest,
+                             default=default, nargs=0, help=help)
+
+        def __call__(self, parser, namespace, values, option_string=None):
+            try:
+                completed = subprocess.run([tool_name, "--help"])
+                parser.exit(completed.returncode)
+            except FileNotFoundError:
+                parser.exit(127, f"DeepSAP.py: {tool_name!r} not found on PATH\n")
+
+    return _ToolHelpAction
+
 
 from predict import predict
 from utility_SAM import Read_Info
 from utility_SAM import get_strand, get_read_score_junctions_regions, get_first_read, is_proper_pair, is_pair, is_mate_1, is_mate_2, get_MAPQ, set_primary_alignment_flag, set_secondary_alignment_flag
-from utility_FASTA import parse_fasta, predict_splice_junctions_from_FASTA, parse_motif_pairs, parse_motifs_arg
+from utility_FASTA import parse_fasta
 from utility_GTF import parse_gtf, get_transcripts_info, Junction, generate_regions, are_mates_from_same_transcript,JunctionFromRead, collect_junctions_sequences_from_GTF
 
 os.environ["HUGGINGFACE_HOME"] = "/root/.cache/huggingface"
@@ -1219,11 +1242,54 @@ class DictBatchIterator:
             raise StopIteration
 
 
-import subprocess
 
 
+def run_gsnap_index(anno_gtf, genome_fasta, gsnap_index, gsnap_idx_flags, log_file):
+    """
+    Creates GSNAP index files using specified parameters.
+    
+    Parameters:
+    - anno_gtf (str): Path to the annotation GTF file.
+    - genome_fasta (str): Path to the genome FASTA file.
+    - gsnap_index (str): Directory where the GSNAP index files will be created.
+    - log_file (str): Path to the log file for command output and error messages.
+    """
+    
+    cmd_genes = f"cat {anno_gtf} | gtf_genes > {gsnap_index}/chr.genes.txt"
+    cmd_gmap_build_genome = f"gmap_build -D {gsnap_index} -d index {genome_fasta}"
+    cmd_gmap_build_transcriptome = f"gmap_build -D {gsnap_index} {gsnap_idx_flags} --genes={gsnap_index}/chr.genes.txt"
 
-def run_gsnap_alignment(gsnap_aln_flags, threads, gsnap_index, gsnap_idx_flags, mate_1, mate_2, sm_view_flags, sam_sort_flags, output_bam, output_prefix, log_file):
+     # Open the log file in append mode
+    with open(log_file, "a") as log:
+        try:
+            subprocess.run(cmd_genes, shell=True, stdout=log, stderr=log, check=True)
+            subprocess.run(cmd_gmap_build_genome, shell=True, stdout=log, stderr=log, check=True)
+            subprocess.run(cmd_gmap_build_transcriptome, shell=True, stdout=log, stderr=log, check=True)
+            
+        except subprocess.CalledProcessError as e:
+            print(f"Error occurred during GSNAP indexing: {e}")
+            exit()
+
+def _build_gsnap_accel_flags(args) -> str:
+    """Return the GSNAP-accelerated passthrough flags the user explicitly set
+    on the DeepSAP CLI, in 'key=value' form. Empty string if none were set.
+
+    Each flag is forwarded verbatim to gsnap only when the user provided it
+    (the corresponding arg is non-None) so the default gsnap behavior is
+    preserved when none of them are passed. --solver-threads, if present
+    here, takes precedence over DeepSAP's auto-wired --solver-threads=
+    <--threads> at the gsnap invocation site so gsnap doesn't see the same
+    flag twice."""
+    parts = []
+    if args.writer_threads  is not None: parts.append(f"--writer-threads={args.writer_threads}")
+    if args.solver_threads  is not None: parts.append(f"--solver-threads={args.solver_threads}")
+    if args.localdb_batch   is not None: parts.append(f"--localdb-batch={args.localdb_batch}")
+    if args.localdb_scratch is not None: parts.append(f"--localdb-scratch={args.localdb_scratch}")
+    if args.batch_nreads    is not None: parts.append(f"--batch-nreads={args.batch_nreads}")
+    return " ".join(parts)
+
+
+def run_gsnap_alignment(gsnap_aln_flags, threads, gsnap_index, gsnap_idx_flags, mate_1, mate_2, sm_view_flags, sam_sort_flags, output_bam, output_prefix, log_file, gsnap_accel_flags=""):
     """
     Runs GSNAP alignment with the specified parameters and saves output to a BAM file.
     
@@ -1238,10 +1304,18 @@ def run_gsnap_alignment(gsnap_aln_flags, threads, gsnap_index, gsnap_idx_flags, 
     - output_bam (str): Path to the output BAM file.
     - output_prefix (str): Prefix for temporary sorting files.
     - log_file (str): Path to the log file for capturing output and error messages.
+    - gsnap_accel_flags (str): GSNAP-accelerated passthrough flags the user
+      explicitly set (see `_build_gsnap_accel_flags`). Empty string when
+      none were set. If this string already contains a `--solver-threads`
+      override, the auto-wired `--solver-threads=<threads>` is suppressed
+      so gsnap doesn't see the same flag twice.
     """
-    
+
+    auto_solver = "" if "--solver-threads" in gsnap_accel_flags else f"--solver-threads={threads} "
+    accel       = (gsnap_accel_flags + " ") if gsnap_accel_flags else ""
+
     cmd_gsnap = (
-        f"gsnap {gsnap_aln_flags} -t {threads} -D {gsnap_index} {gsnap_idx_flags} "
+        f"gsnap {gsnap_aln_flags} {auto_solver}{accel}-D {gsnap_index} {gsnap_idx_flags} "
         f"{mate_1} {mate_2} | "
         f"samtools view -u -b -h {sm_view_flags} - | "
         f"samtools sort {sam_sort_flags} -o {output_bam} -T {output_prefix} -@ {threads}"
@@ -1287,55 +1361,6 @@ def run_gsnap_alignment(gsnap_aln_flags, threads, gsnap_index, gsnap_idx_flags, 
                 log.write(e.stderr)
             exit(1)
 
-def load_folder_from_encrypted_file(encrypted_file, encryption_key, output_directory):
-    """
-    Decrypt an encrypted file and extract its contents as a folder.
-
-    Args:
-        encrypted_file (str): Path to the encrypted file.
-        encryption_key (str): Encryption key used to encrypt the file.
-        output_directory (str): Path to extract the contents of the decrypted file.
-
-    Returns:
-        str: Path to the extracted folder.
-    """
-    # Initialize the Fernet cipher with the provided key
-    cipher_suite = Fernet(encryption_key.encode())
-
-    # Decrypt the encrypted file
-    decrypted_tar_path = "/tmp/decrypted_model.tar.gz"  # Temporary path for the decrypted .tar.gz
-    with open(encrypted_file, "rb") as file:
-        encrypted_data = file.read()
-    
-    decrypted_data = cipher_suite.decrypt(encrypted_data)
-
-    # Write the decrypted data to a temporary .tar.gz file
-    with open(decrypted_tar_path, "wb") as file:
-        file.write(decrypted_data)
-    
-    # Extract the .tar.gz file into the output directory
-    with tarfile.open(decrypted_tar_path, "r:gz") as tar:
-        tar.extractall(path=output_directory)
-    
-    # Cleanup: Remove the temporary .tar.gz file
-    import os
-    os.remove(decrypted_tar_path)
-
-    # print(f"Folder extracted to: {output_directory}")
-    return output_directory
-
-
-
-#### DeepSAP v0.1.0 
-
-import os
-import subprocess
-from datetime import datetime
-import shutil
-import pysam
-from pyfaidx import Fasta
-
-
 class SpliceJunction:
     """
     A class to store detailed information about a unique splice junction,
@@ -1369,14 +1394,20 @@ def match_motif_with_mismatch(sequence, motif):
 
 def run_gsnap_and_filter_stream(gsnap_flags, threads, gsnap_index, gsnap_index_opts, 
                                 mate_1, mate_2, sm_view_flags, sm_sort_flags, 
-                                output_prefix, log_file, genome_fasta, annotated_junctions_table, window_size):
-    
+                                output_prefix, log_file, genome_fasta, annotated_junctions_table, window_size,
+                                gsnap_accel_flags=""):
+
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tStarting single-pass GSNAP streaming workflow.")
 
     clean_bam_path = f"{output_prefix}.bam"
     junctions_tsv_path = f"{output_prefix}_junctions.tsv"
 
-    gsnap_cmd = f"gsnap {gsnap_flags} -t {threads} -D {gsnap_index} {gsnap_index_opts} {mate_1} {mate_2}"
+    # Same --solver-threads override semantics as run_gsnap_alignment: a
+    # user-supplied --solver-threads in gsnap_accel_flags wins over the
+    # auto-wired one to avoid gsnap seeing the flag twice.
+    auto_solver = "" if "--solver-threads" in gsnap_accel_flags else f"--solver-threads={threads} "
+    accel       = (gsnap_accel_flags + " ") if gsnap_accel_flags else ""
+    gsnap_cmd = f"gsnap {gsnap_flags} {auto_solver}{accel}-D {gsnap_index} {gsnap_index_opts} {mate_1} {mate_2}"
     clean_samtools_cmd = f"samtools view -u -b -h {sm_view_flags} - | samtools sort {sm_sort_flags} -o {clean_bam_path} -T {output_prefix}_clean_temp -@ {threads}"
     
     junction_table = {}
@@ -1441,7 +1472,7 @@ def run_gsnap_and_filter_stream(gsnap_flags, threads, gsnap_index, gsnap_index_o
             print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tCalculating motif statistics...")
             forward_signals, reverse_signals = {}, {}
             for junc in junction_table.values():
-                canonical_motif = junc.motif if junc.strand == '+' else get_reverse_complement(junc.motif)
+                canonical_motif = junc.motif if junc.strand == '+' else reverse_complement(junc.motif)
                 if junc.strand == '+':
                     forward_signals[canonical_motif] = forward_signals.get(canonical_motif, 0) + 1
                 else:
@@ -1504,7 +1535,7 @@ def update_junction_table(junction_table, sam_records, sam_header, genome, annot
                         else:
                             strand = '-' if record.is_reverse else '+'
                     
-                    final_motif = raw_motif if strand == '+' else get_reverse_complement(raw_motif)
+                    final_motif = raw_motif if strand == '+' else reverse_complement(raw_motif)
                     junction_id_1based = f"{chrom}__{strand}__{donor_coord_0based + 1}__{acceptor_coord_0based + 1}"
 
                     if junction_id_1based not in junction_table:
@@ -1516,6 +1547,10 @@ def update_junction_table(junction_table, sam_records, sam_header, genome, annot
                         ref_donor_seq = str(genome[chrom][donor_seq_start:donor_seq_end]).upper()
                         ref_acceptor_seq = str(genome[chrom][acceptor_seq_start:acceptor_seq_end]).upper()
                         
+                        # TODO: Fix biotype lookup for annotated junctions.
+                        # collect_junctions_sequences_from_GTF returns Junction objects (utility_GTF.Junction),
+                        # not dicts. Using `.get('type')` on a Junction will raise AttributeError.
+                        # Use the object's transcript_type attribute (or a safe object/dict-compatible lookup).
                         biotype = annotated_junctions_table.get(junction_id_1based, {}).get('type', 'novel')
                         
                         junction_table[junction_id_1based] = SpliceJunction(
@@ -1530,142 +1565,7 @@ def update_junction_table(junction_table, sam_records, sam_header, genome, annot
         except (ValueError, KeyError, IndexError):
             continue
 
-### old ###
 
-def run_gsnap_index(anno_gtf, genome_fasta, gsnap_index, gsnap_idx_flags, log_file):
-    """
-    Creates GSNAP index files using specified parameters.
-    
-    Parameters:
-    - anno_gtf (str): Path to the annotation GTF file.
-    - genome_fasta (str): Path to the genome FASTA file.
-    - gsnap_index (str): Directory where the GSNAP index files will be created.
-    - log_file (str): Path to the log file for command output and error messages.
-    """
-    
-    cmd_genes = f"cat {anno_gtf} | gtf_genes > {gsnap_index}/chr.genes.txt"
-    cmd_gmap_build_genome = f"gmap_build -D {gsnap_index} -d index {genome_fasta}"
-    cmd_gmap_build_transcriptome = f"gmap_build -D {gsnap_index} {gsnap_idx_flags} --genes={gsnap_index}/chr.genes.txt"
-
-     # Open the log file in append mode
-    with open(log_file, "a") as log:
-        try:
-            subprocess.run(cmd_genes, shell=True, stdout=log, stderr=log, check=True)
-            subprocess.run(cmd_gmap_build_genome, shell=True, stdout=log, stderr=log, check=True)
-            subprocess.run(cmd_gmap_build_transcriptome, shell=True, stdout=log, stderr=log, check=True)
-            
-        except subprocess.CalledProcessError as e:
-            print(f"Error occurred during GSNAP indexing: {e}")
-            exit()
-
-def run_gsnap_and_filter_stream_old(gsnap_aln_flags, gsnap_index, gsnap_idx_flags, threads, 
-                                mate_1, mate_2, sam_view_flags, sam_sort_flags, 
-                                output_prefix, log_file):
-    """
-    Runs a full GSNAP alignment and filtering workflow in a single, memory-efficient stream.
-
-    This function pipes GSNAP output to a Python filter, which then routes reads
-    to one of two parallel samtools pipelines. The "clean" reads are sorted and saved
-    as a BAM file, while the "filtered" reads are saved directly as an unsorted BAM file.
-    """
-    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tStarting single-pass GSNAP streaming workflow.")
-
-    # Define final output paths
-    clean_bam_path = f"{output_prefix}.bam"
-    filtered_bam_path = f"{output_prefix}_filtered.bam"
-
-    # Construct the pipeline commands
-    gsnap_cmd = f"gsnap {gsnap_aln_flags} -t {threads} -D {gsnap_index} {gsnap_idx_flags} {mate_1} {mate_2}"
-    
-    # Command for the "clean" BAM file (sorted)
-    clean_samtools_cmd = f"samtools view -u -b -h {sam_view_flags} - | samtools sort {sam_sort_flags} -o {clean_bam_path} -T {output_prefix}_clean_temp -@ {threads//2 or 1}"
-    
-    # MODIFIED: Command for the "filtered" BAM file (unsorted)
-    filtered_samtools_cmd = f"samtools view -b -h {sam_view_flags} -o {filtered_bam_path} -"
-
-    with open(log_file, "a") as log:
-        try:
-            # Start the GSNAP process
-            gsnap_process = subprocess.Popen(gsnap_cmd, shell=True, stdout=subprocess.PIPE, stderr=log, text=True)
-            
-            # Start the two parallel samtools processes
-            clean_process = subprocess.Popen(clean_samtools_cmd, shell=True, stdin=subprocess.PIPE, stderr=log, text=True)
-            filtered_process = subprocess.Popen(filtered_samtools_cmd, shell=True, stdin=subprocess.PIPE, stderr=log, text=True)
-
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tProcesses started. Filtering stream...")
-
-            current_read_id = None
-            read_buffer = []
-            has_n_cigar = False
-
-            # Process the stream from GSNAP line by line
-            for line in gsnap_process.stdout:
-                if line.startswith('@'):
-                    # Write header lines to both downstream processes
-                    clean_process.stdin.write(line)
-                    filtered_process.stdin.write(line)
-                    continue
-
-                fields = line.strip().split('\t')
-                read_id = fields[0]
-
-                if read_id != current_read_id:
-                    # We've encountered a new read, so process the previous one
-                    if current_read_id is not None:
-                        if has_n_cigar:
-                            for record in read_buffer:
-                                filtered_process.stdin.write(record)
-                        else:
-                            for record in read_buffer:
-                                clean_process.stdin.write(record)
-                    
-                    # Reset for the new read
-                    current_read_id = read_id
-                    read_buffer = []
-                    has_n_cigar = False
-
-                # Buffer the current line and check its CIGAR
-                read_buffer.append(line)
-                cigar = fields[5]
-                if 'N' in cigar:
-                    has_n_cigar = True
-
-            # Process the very last read in the file
-            if current_read_id is not None:
-                if has_n_cigar:
-                    for record in read_buffer:
-                        filtered_process.stdin.write(record)
-                else:
-                    for record in read_buffer:
-                        clean_process.stdin.write(record)
-
-            # Close the stdin pipes to signal that we're done sending data
-            clean_process.stdin.close()
-            filtered_process.stdin.close()
-
-            # Wait for all processes to finish
-            gsnap_retcode = gsnap_process.wait()
-            clean_retcode = clean_process.wait()
-            filtered_retcode = filtered_process.wait()
-
-            if gsnap_retcode != 0 or clean_retcode != 0 or filtered_retcode != 0:
-                raise subprocess.CalledProcessError(
-                    gsnap_retcode or clean_retcode or filtered_retcode, gsnap_cmd
-                )
-
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tIndexing final clean BAM file...")
-            pysam.index(clean_bam_path)
-            
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tClean alignments saved to: {clean_bam_path}")
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tFiltered alignments saved to: {filtered_bam_path}")
-
-        except Exception as e:
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[ERROR]\tAn error occurred during the streaming workflow: {e}")
-            exit(1)
-
-
-
-####
 if __name__ == '__main__':
     version = "v0.1.0"
     command = "DeepSAP "
@@ -1673,61 +1573,84 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description = 'DeepSAP')
 
-    parser.add_argument('-o','--out',       help='Path to output folder',                                      required=True, type=str)
-    parser.add_argument('--prefix',         help="Prefix to ouput files",                                   dest='prefix', required=True, type=str, default ="")
-    parser.add_argument('-s','--sam',       help='Path to the SAM/BAM file or director of files',              required=False, type=str, default ="")
-    parser.add_argument('-f','--fasta',     help='Path to FASTA genome file compatible with the BAM file',     required=True, type=str)
-    parser.add_argument('-g','--gtf',       help='Path to GTF annotation file compatible with the BAM file',   required=False, type=str, default ="")
-    parser.add_argument('-c','--config',    help='Config .json file',                                          required=True, type=str)
+    # Bracketed prefix in each help= string groups args by subsystem so
+    # `--help` is self-explanatory: [Help] / [Mode] / [I/O] / [Common] /
+    # [GSNAP Index] / [GSNAP] / [GSNAP accelerated] / [Samtools] / [TSJS].
+    parser.add_argument('--gsnap-help', action=_make_tool_help_action('gsnap'),
+                        help="[Help] Print 'gsnap --help' from the bundled GSNAP binary and exit.")
+    parser.add_argument('--gmap-build-help', action=_make_tool_help_action('gmap_build'),
+                        help="[Help] Print 'gmap_build --help' from the bundled gmap_build binary and exit.")
+    parser.add_argument('--samtools-help', action=_make_tool_help_action('samtools'),
+                        help="[Help] Print 'samtools --help' from the bundled samtools binary and exit.")
+
+    parser.add_argument('-o','--out',       help='[I/O] Path to output folder',                                      required=True, type=str)
+    parser.add_argument('--prefix',         help="[I/O] Prefix to ouput files",                                  dest='prefix', required=True, type=str, default ="")
+    parser.add_argument('-s','--sam',       help='[I/O] Path to the SAM/BAM file or director of files',              required=False, type=str, default ="")
+    parser.add_argument('-f','--fasta',     help='[I/O] Path to FASTA genome file compatible with the BAM file',     required=True, type=str)
+    parser.add_argument('-g','--gtf',       help='[I/O] Path to GTF annotation file compatible with the BAM file',   required=False, type=str, default ="")
+    parser.add_argument('-c','--config',    help='[Common] Config .json file',                                       required=False, type=str, default="/scripts/parameters_config.json")
     # parser.add_argument('--samtools',       help='Path to samtools',                                           required=False, type=str, default="samtools")
-    parser.add_argument('--model_name',     help='Tranformer pre-trained model name',                       required=True, type=str)
-    parser.add_argument('--model_path',     help='Tranformer model path',                                   required=True, type=str)
-    parser.add_argument('--score_method',   help='Splice-junction scoring method',                          required=False, default="Add")
-    parser.add_argument('--batch',          help='Batch size when performing prediction ',                    required=False, type=int, default=2048)
-    parser.add_argument('--set_size',       help='Datapoints set is splitted into sets of this size to avoid performing prediction  on the whole datasets at once', required=False, type=int, default= 1024 * 100)
-    parser.add_argument('--max_seq',        help='Maximum sequence length',                                 required=True, type=int)
-    parser.add_argument('--seed',           help='Randomness seed',                                         required=False, type=int, default=42)
-    parser.add_argument('-w','--window',    help='Window size around splice-junction used by the Transformer Model', required=True, type=int)
-    parser.add_argument('-k','--kmer',      help='Kmer size used by the Transformer Model',                          required=True, type=int)
-    parser.add_argument('-t','--threads',   help='Number of threads',                          required=False, type=int, default=os.cpu_count())
-    parser.add_argument('--fp16',           help='Use fp16', action='store_true')
-    parser.add_argument('--no-fp16',        help="Don't use fp16", dest='fp16', action='store_false')
-    parser.add_argument('--score_reads',    help='Classify reads using Transformer model and ddd reads scores to SAM', action='store_true')
-    parser.add_argument('--n_reads',        help='Number of reads to be classified using Transformer model if --score_reads is used ', required=False, type=int, default=100000)
-    parser.add_argument('--tokens',         help='Get first 1k tokens', action='store_true')
-    parser.add_argument('--test',           help="Don't perform prediction", dest='test', action='store_true')
-    parser.add_argument('--mate_1',         help="Fastq file of mate 1 (RNA-seq short reads)", dest='mate_1',    required=False, type=str, default ="")
-    parser.add_argument('--mate_2',         help="Fastq file of mate 2 (RNA-seq short reads)", dest='mate_2',    required=False, type=str, default ="")
-    
-    parser.add_argument('--gsnap_idx',      help="GSNAP index path ",                      dest='gsnap_idx',        required=False, type=str, default ="")
-    parser.add_argument('--gsnap_idx_flags',help="GSNAP indexing flags ",                  dest='gsnap_idx_flags',  required=False, type=str, default ="-d index -c transcriptome")
-    parser.add_argument('--gsnap_aln_flags',help="GSNAP alignment flags ",                 dest='gsnap_aln_flags',  required=False, type=str, default ="--gunzip -A sam --novelsplicing 1")
+    parser.add_argument('--model_name',     help='[TSJS] Tranformer pre-trained model name',                       required=False, type=str, default="zhihan1996/DNA_bert_6")
+    parser.add_argument('--model_path',     help='[TSJS] Tranformer model path',                                   required=False, type=str, default="/DeepSAP/tuned_models/DNABERT_MS150")
+    parser.add_argument('--score_method',   help='[TSJS] Splice-junction scoring method',                          required=False, default="Add")
+    parser.add_argument('--batch',          help='[TSJS] Number of candidate splice junctions scored per transformer forward pass (raises throughput; raises GPU memory use)', required=False, type=int, default=2048)
+    parser.add_argument('--set_size',       help='[TSJS] Datapoints set is splitted into sets of this size to avoid performing prediction on the whole datasets at once', required=False, type=int, default= 1024 * 100)
+    parser.add_argument('--max_seq',        help='[TSJS] Maximum sequence length',                                 required=False, type=int, default=150)
+    parser.add_argument('--seed',           help='[Common] Randomness seed',                                       required=False, type=int, default=42)
+    parser.add_argument('-w','--window',    help='[TSJS] Window size around splice-junction used by the Transformer Model', required=False, type=int, default=150)
+    parser.add_argument('-k','--kmer',      help='[TSJS] Kmer size used by the Transformer Model',                          required=False, type=int, default=6)
+    parser.add_argument('-t','--threads',   help='[Common] Number of threads',                                              required=False, type=int, default=os.cpu_count())
+    parser.add_argument('--fp16',           help='[TSJS] Use fp16', action='store_true')
+    parser.add_argument('--no-fp16',        help="[TSJS] Don't use fp16", dest='fp16', action='store_false')
+    parser.add_argument('--score_reads',    help='[TSJS] Classify reads using Transformer model and add reads scores to SAM', action='store_true')
+    parser.add_argument('--n_reads',        help='[TSJS] Number of reads to be classified using Transformer model if --score_reads is used', required=False, type=int, default=100000)
+    parser.add_argument('--tokens',         help='[TSJS] Get first 1k tokens', action='store_true')
+    parser.add_argument('--test',           help="[TSJS] Don't perform prediction", dest='test', action='store_true')
+    parser.add_argument('--mate_1',         help="[I/O] Fastq file of mate 1 (RNA-seq short reads)", dest='mate_1',    required=False, type=str, default ="")
+    parser.add_argument('--mate_2',         help="[I/O] Fastq file of mate 2 (RNA-seq short reads)", dest='mate_2',    required=False, type=str, default ="")
 
-    parser.add_argument('--samtools',       help='Samtools binary path',                   dest='samtools',         required=False, type=str, default="samtools")
-    parser.add_argument('--sam_sort_flags', help='Samtools sort flags',                    dest='sam_sort_flags',   required=False, type=str, default="-m 500M")
-    parser.add_argument('--chr_coverage',   help='Max bases per chromosome to scan',                default=10**12, type=int)
-    parser.add_argument('--motifs',         help='4-mers, space/comma-separated (e.g. "GTAG ATAC GCAG")', default="GTAG ATAC GCAG", type=str)
-    parser.add_argument('--min_prob',       required=False, type=float, default=0.10, help='Minimum probability to report a site')
+    parser.add_argument('--gsnap_idx',      help="[GSNAP Index] GSNAP index path",                                   dest='gsnap_idx',        required=False, type=str, default ="")
+    parser.add_argument('--gsnap_idx_flags',help="[GSNAP Index] GSNAP indexing flags",                               dest='gsnap_idx_flags',  required=False, type=str, default ="-d index -c transcriptome")
+    parser.add_argument('--gsnap_aln_flags',help="[GSNAP] GSNAP alignment flags",                                    dest='gsnap_aln_flags',  required=False, type=str, default ="--gunzip -A sam --novelsplicing 1")
 
+    # [GSNAP accelerated] passthrough flags. All default to None so we can
+    # detect whether the user explicitly set them; only the ones the user
+    # set are forwarded to gsnap (see _build_gsnap_accel_flags + the
+    # run_gsnap_* helpers below). --solver-threads, if set, replaces the
+    # auto-wired --solver-threads=<--threads> to avoid gsnap seeing the
+    # same flag twice.
+    parser.add_argument('--writer-threads',  dest='writer_threads',  required=False, type=int, default=None,
+                        help='[GSNAP accelerated] Threads for the GSNAP SAM/BAM writer stage. Forwarded to gsnap only if set.')
+    parser.add_argument('--solver-threads',  dest='solver_threads',  required=False, type=int, default=None,
+                        help="[GSNAP accelerated] Threads for the GSNAP aligner solver stage. If set, overrides DeepSAP's auto-wired --solver-threads=<--threads>.")
+    parser.add_argument('--localdb-batch',   dest='localdb_batch',   required=False, type=int, default=None,
+                        help='[GSNAP accelerated] Requests per GPU kernel launch on the --localdb=GPU path. Forwarded to gsnap only if set.')
+    parser.add_argument('--localdb-scratch', dest='localdb_scratch', required=False, type=str, default=None,
+                        help='[GSNAP accelerated] Unified GPU device-byte budget for localdb scratch (e.g. 8G; accepts K/M/G suffixes). Forwarded to gsnap only if set.')
+    parser.add_argument('--batch-nreads',    dest='batch_nreads',    required=False, type=int, default=None,
+                        help='[GSNAP accelerated] Max individual reads per frame (paired-end: even, >= 2). Forwarded to gsnap only if set.')
+
+    parser.add_argument('--samtools',       help='[Samtools] Samtools binary path',                                  dest='samtools',         required=False, type=str, default="samtools")
+    parser.add_argument('--sam_sort_flags', help='[Samtools] Samtools sort flags',                                   dest='sam_sort_flags',   required=False, type=str, default="-m 500M")
+    parser.add_argument('--chr_coverage',   help='[TSJS] Max bases per chromosome to scan',                          default=10**12, type=int)
+    parser.add_argument(
+        '--mode',
+        help=(
+            "[Mode] Which pipeline mode to run. "
+            "'index' builds a GSNAP index from --fasta + --gtf and exits. "
+            "'GSNAP+TSJS' runs streaming alignment followed by transformer splice-junction "
+            "scoring; if --gsnap_idx is missing, an index is auto-built from --fasta + --gtf "
+            "at <out>/gsnap_idx/. With --sam, GSNAP+TSJS instead runs TSJS only on the "
+            "existing BAM."
+        ),
+        choices=['index', 'GSNAP', 'GSNAP+TSJS'],
+        default='GSNAP+TSJS',
+    )
     parser.set_defaults(fp16=True)
     
     print("\n[{}]\t[INFO]\tRunning DeepSAP {}".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), version))
 
     args = parser.parse_args()
-
-    ## load model 
-    clean_up = False
-    if str(args.model_path).endswith(".tar.gz"):
-        model_tag = os.path.basename(args.model_path).removesuffix(".tar.gz")
-        clean_up = True 
-
-        if model_tag == 'ADNRBE_T11MS50':
-            encryption_key = 'tV5xffLxBbOJxZI5laxLBicMlvGd8svmYehI9Hg0cOs='
-            model_path_tmp = "/tmp/76/12/09/bin/dir/contains/include/"
-            os.makedirs(model_path_tmp, exist_ok=True)
-
-            load_folder_from_encrypted_file(args.model_path, encryption_key, model_path_tmp)
-            args.model_path = model_path_tmp + "/DNABERT1_MS150"
 
     # Setting up output folder
     if not args.out.endswith("/"):
@@ -1736,233 +1659,154 @@ if __name__ == '__main__':
 
     os.makedirs(args.out, exist_ok=True)
     
-    if args.fasta != "" and args.gtf == "" and args.sam == "" and args.mate_1 == "" and args.mate_2 == "":
-        """
-        Motif	Spliceosome Type	            Frequency in Humans	        Reason to Include
-        GT-AG	Major (U2-type)	                Canonical (>98%)	        This is the most common splicing signal.
-        GC-AG	Major (U2-type)	                Common non-canonical (~1%)	The most frequent alternative to GT-AG and is still processed by the main splicing machinery.
-        AT-AC	Both Major (U2) & Minor (U12)	Rare (~0.1%)	            Capture rare events. This motif is recognized by both splicing systems and is crucial for identifying a subset of rare introns.
-        AT-AA	Minor (U12-type) only	        Very rare (~0.05%)	        Capture a different pathway. The primary signal for the distinct U12 splicing pathway, which often regulates fundamentally important genes.
+    # Strict --mode dispatch. Each branch validates that only the flags
+    # relevant to that stage are populated, then executes that stage.
+    has_mates  = bool(args.mate_1) and bool(args.mate_2)
+    has_either_mate = bool(args.mate_1) or bool(args.mate_2)
+    has_sam    = bool(args.sam)
+    has_gtf    = bool(args.gtf)
+    has_fasta  = bool(args.fasta)
+    has_index  = bool(args.gsnap_idx)
 
-        D+: i, D-: i+1, A+: i+1, A-: i
+    def _die(msg: str) -> None:
+        parser.error(f"--mode {args.mode}: {msg}")
 
-        | Biological site (on gene's strand)      | What we scan on **forward reference** (2-mer at `seq[i:i+2]`)  | Class | Locus to report (`pos`)                                                   |
-        | --------------------------------------- | -------------------------------------------------------------- | ----- | ------------------------------------------------------------------------- |
-        | **Donor, + strand (5′ splice site)**    | `GT`, `GC`, `AT`                                               | `D`   | `pos = i` (the **first** base of the 2-mer; e.g., the **G** in `GT`)      |
-        | **Donor, - strand (5′ splice site)**    | `AC` (rc of `GT`), `GC` (pal), `AT` (pal)                      | `D`   | `pos = i + 1` (the **second** base of the 2-mer; e.g., the **C** in `AC`) |
-        | **Acceptor, + strand (3′ splice site)** | `AG`, `AC`                                                     | `A`   | `pos = i + 1` (the **second** base of the 2-mer; e.g., the **G** in `AG`) |
-        | **Acceptor, - strand (3′ splice site)** | `CT` (rc of `AG`), `GT` (rc of `AC`)                           | `A`   | `pos = i` (the **first** base of the 2-mer; e.g., the **C** in `CT`)      |
-        """
+    if args.mode == 'index':
+        if not has_fasta or not has_gtf:
+            _die("requires --fasta and --gtf")
+        if has_mates or has_either_mate:
+            _die("--mate_1 / --mate_2 are not allowed with index mode")
+        if has_sam:
+            _die("--sam is not allowed with index mode")
+        if has_index:
+            _die("--gsnap_idx is not allowed with index mode (the index is written to --out/--prefix)")
 
-        # Motifs
-        motif_pairs = parse_motifs_arg(args.motifs) or ["GTAG","ATAC","GCAG"]
-        donors_fwd, acceptors_fwd = parse_motif_pairs(motif_pairs)
-
-        # Flanks: center window on boundary (acceptor left is 2 less to keep total window)
-        donor_left  = int(args.window // 2)
-        accept_left = int(args.window // 2) - 2
-
-        # Build predict_args (clean, non-duplicated)
-        predict_args = {
-            'model_name': "/DNA_bert_6/",
-            'model_path': args.model_path,
-            'kmer': args.kmer,
-            'batch': args.batch,
-            'seed': args.seed,
-            'trust_remote_code': False,
-            'local_files_only': True,
-            'num_labels': 3,
-
-            'donor_left': donor_left,
-            'accept_left': accept_left,
-            'donor_label_idx': 0,
-            'acceptor_label_idx': 1,
-            'donors_fwd': donors_fwd,
-            'acceptors_fwd': acceptors_fwd,
-
-            # precision & speed (target stack)
-            'dtype': 'bf16',            # weights in bfloat16
-            'amp': True,                # autocast
-            'allow_tf32': True,         # TF32 matmul
-            'compile': False,           # keep False unless Triton toolchain is ready
-            'bettertransformer': True,  # fused fastpath
-            'low_cpu_mem_usage': True,
-            'device_map': 'cuda',
-
-            # tokenizer behavior (fixed windows -> no padding)
-            'padding': 'none',
-            'add_special_tokens': True,
-            'max_seq': 0,               # ignored with padding='none'
-
-            # scan coverage
-            'chr_coverage': int(args.chr_coverage),
-
-            # reporting filter
-            'min_prob': float(args.min_prob),
-        }
-
-        # Only do FASTA→CSV path in this entrypoint
-        if args.fasta and not any([args.gtf, args.sam, args.mate_1, args.mate_2]):
-            print(f"\n[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[INFO]\tStarting splice-site prediction")
-
-            t0 = time.time()
-            predict_splice_junctions_from_FASTA(
-                fasta_path=args.fasta,
-                window_size=args.window,
-                n_datapoints_per_run=args.set_size,
-                chr_coverage=args.chr_coverage,
-                output_path=args.out,
-                predict_args=predict_args
-            )
-            t1 = time.time()
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[INFO]\tDone in {(t1 - t0)/60:.2f} min")
-        exit()
-
-    elif args.gsnap_idx == "" and args.fasta != "" and args.gtf != "" and args.sam == "" and args.mate_1 == "" and args.mate_2 == "":
-        
         start_time = time.time()
-        args.gsnap_idx = os.path.join(args.out , args.prefix)
+        args.gsnap_idx = os.path.join(args.out, args.prefix)
         os.makedirs(args.gsnap_idx, exist_ok=True)
-
-        gsnap_indexing_log = os.path.join(args.gsnap_idx , "gsnap_indexing_log.txt")
+        gsnap_indexing_log = os.path.join(args.gsnap_idx, "gsnap_indexing_log.txt")
 
         print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[INFO]\tBuilding GSNAP TGGA index '{args.gsnap_idx}'")
-
         run_gsnap_index(
             anno_gtf=args.gtf,
             genome_fasta=args.fasta,
             gsnap_index=args.gsnap_idx,
             gsnap_idx_flags=args.gsnap_idx_flags,
-            log_file=gsnap_indexing_log)
-        
+            log_file=gsnap_indexing_log,
+        )
         end_time = time.time()
         print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[INFO]\tTotal execution time: {(end_time - start_time)/60:.2f} minutes.")
-
         exit()
-    
-    elif args.gsnap_idx != "" and args.fasta != "" and args.gtf != "" and args.mate_1 != "" and args.mate_2 != "" and args.sam == "":
+
+    if args.mode == 'GSNAP':
+        if not has_mates:
+            _die("requires --mate_1 and --mate_2")
+        if has_sam:
+            _die("--sam is not allowed with GSNAP mode (alignment writes its own BAM)")
+        if not has_index and (not has_fasta or not has_gtf):
+            _die("requires --gsnap_idx, or --fasta + --gtf so an index can be auto-built")
+
         start_time = time.time()
-        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[INFO]\tProcessing paired-end short RNA-seq reads ")
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tRunning GSNAP alignment only (no TSJS)")
 
-        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tParsing GTF file '{args.gtf}'")
-
-        genome_fasta = Fasta(args.fasta)
-
-        genes_table, transcripts_table, exons_table = parse_gtf(args.gtf)
-        
-        annotated_junctions_table = collect_junctions_sequences_from_GTF(
-            genome_fasta,
-            transcripts_table, 
-            exons_table, 
-            args.window, 
-            "", # transcript_types
-            is_verbose=False,
-            is_training=True,
-            is_strict=True,
-            add_junction_seq=True
-        )
-        
-        # print("\n--- Example Junctions ---")
-        # count = 0
-        # for junc_id, junc_obj in annotated_junctions_table.items():
-        #     print(f"ID: {junc_id}, Motif: {junc_obj.signal}, Donor Seq Length: {len(junc_obj.donor_kmers)}")
-        #     count += 1
-        #     if count >= 100:
-        #         break
-
-        gsnap_aligning_log = os.path.join(args.out, args.prefix + "_gsnap_aligning_log.txt")
-        final_output_prefix = os.path.join(args.out, args.prefix)
-        
-        
-
-        os.makedirs(args.out, exist_ok=True)
-        
-        # Call the new single-pass streaming function
-        run_gsnap_and_filter_stream(
-            gsnap_flags=args.gsnap_aln_flags,
-            threads=args.threads, 
-            gsnap_index=args.gsnap_idx,
-            gsnap_index_opts=args.gsnap_idx_flags,
-            mate_1=args.mate_1, 
-            mate_2=args.mate_2, 
-            sm_view_flags="", 
-            sm_sort_flags=args.sam_sort_flags, 
-            output_prefix=final_output_prefix,
-            log_file=gsnap_aligning_log,
-            genome_fasta=genome_fasta,
-            annotated_junctions_table=annotated_junctions_table,
-            window_size=args.window
-        )
-        
-        end_time = time.time()
-        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[INFO]\tTotal execution time: {(end_time - start_time)/60:.2f} minutes.")
-        exit()
-
-
-
-        # gsnap_aligning_log = os.path.join(args.out , args.prefix + "_gsnap_aligning_log.txt")
-        # args.sam = os.path.join(args.out , args.prefix + "_gsnap.bam")
-
-        # gsnap_tmp = os.path.join(args.out , args.prefix + "_gsnap_tmp/")
-        # os.makedirs(gsnap_tmp, exist_ok=True)
-
-        # print("[{}]\t[LOG]\tRunning GSNAP TGGA '{}'".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), args.sam))
-
-        # run_gsnap_alignment(gsnap_aln_flags="--gunzip -A sam --novelsplicing 1", 
-        #                     threads=args.threads, 
-        #                     gsnap_index=args.gsnap_idx,
-        #                     gsnap_idx_flags=args.gsnap_idx_flags,
-        #                     mate_1 = args.mate_1, 
-        #                     mate_2 = args.mate_2, 
-        #                     sm_view_flags = "", 
-        #                     sam_sort_flags = "", 
-        #                     output_bam = args.sam, 
-        #                     output_prefix = gsnap_tmp,
-        #                     log_file = gsnap_aligning_log)
-        
-
-        # // another function that takes the ouput from run_gsnap_alignment and do two things:
-        # 1- Filter out read Id if any alignment record has N cigar and write to {args.prefix}_filtered.bam  
-        # 2- otherwise, write to bam file. {args.prefix}.bam
-        
-        exit()
-        
-
-    if args.mate_1 != "" and args.mate_2 != "":
-        print("[{}]\t[LOG]\tRunning GSNAP".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-
-        if args.gsnap_idx == "":
-            args.gsnap_idx = os.path.join(args.out , "gsnap_idx")
+        if not has_index:
+            args.gsnap_idx = os.path.join(args.out, "gsnap_idx")
             os.makedirs(args.gsnap_idx, exist_ok=True)
-
-            gsnap_indexing_log = os.path.join(args.out , "gsnap_indexing_log.txt")
-            print("[{}]\t[LOG]\tBuilding GSNAP TGGA index '{}'".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), args.gsnap_idx))
-            
+            gsnap_indexing_log = os.path.join(args.out, "gsnap_indexing_log.txt")
+            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tBuilding GSNAP TGGA index '{args.gsnap_idx}'")
             run_gsnap_index(
                 anno_gtf=args.gtf,
                 genome_fasta=args.fasta,
                 gsnap_index=args.gsnap_idx,
-                log_file=gsnap_indexing_log
+                gsnap_idx_flags=args.gsnap_idx_flags,
+                log_file=gsnap_indexing_log,
             )
 
-        gsnap_aligning_log = os.path.join(args.out , args.prefix + "_gsnap_aligning_log.txt")
-        args.sam = os.path.join(args.out , args.prefix + "_gsnap.bam")
-
-        gsnap_tmp = os.path.join(args.out , args.prefix + "_gsnap_tmp/")
+        gsnap_aligning_log = os.path.join(args.out, args.prefix + "_gsnap_aligning_log.txt")
+        args.sam = os.path.join(args.out, args.prefix + "_gsnap.bam")
+        gsnap_tmp = os.path.join(args.out, args.prefix + "_gsnap_tmp/")
         os.makedirs(gsnap_tmp, exist_ok=True)
 
-        print("[{}]\t[LOG]\tRunning GSNAP TGGA '{}'".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), args.sam))
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tRunning GSNAP TGGA -> '{args.sam}'")
+        run_gsnap_alignment(
+            gsnap_aln_flags=args.gsnap_aln_flags,
+            threads=args.threads,
+            gsnap_index=args.gsnap_idx,
+            gsnap_idx_flags=args.gsnap_idx_flags,
+            mate_1=args.mate_1,
+            mate_2=args.mate_2,
+            sm_view_flags="",
+            sam_sort_flags=args.sam_sort_flags,
+            output_bam=args.sam,
+            output_prefix=gsnap_tmp,
+            log_file=gsnap_aligning_log,
+            gsnap_accel_flags=_build_gsnap_accel_flags(args),
+        )
+        end_time = time.time()
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[INFO]\tTotal execution time: {(end_time - start_time)/60:.2f} minutes.")
+        exit()
 
-        run_gsnap_alignment(gsnap_aln_flags="--gunzip -A sam --novelsplicing 1", 
-                            threads=args.threads, 
-                            gsnap_index=args.gsnap_idx, 
-                            mate_1 = args.mate_1, 
-                            mate_2 = args.mate_2, 
-                            sm_view_flags = "", 
-                            sam_sort_flags = "", 
-                            output_bam = args.sam, 
-                            output_prefix = gsnap_tmp,
-                            log_file = gsnap_aligning_log)
+    # --- args.mode == 'GSNAP+TSJS' (default) --------------------------------
+    # Two shapes accepted:
+    #   A) mates (+ --gsnap_idx OR --fasta+--gtf to auto-build one) -> streaming align+score, exits.
+    #   B) --sam (+ --fasta + --gtf)                                -> score an existing BAM in place.
+    if has_index and has_sam:
+        _die("--gsnap_idx and --sam are mutually exclusive")
+    if has_mates and has_sam:
+        _die("--sam cannot be combined with --mate_1/--mate_2")
+    if has_either_mate and not has_mates:
+        _die("both --mate_1 and --mate_2 are required for paired-end input")
+    if not has_mates and not has_sam:
+        _die("requires either --mate_1+--mate_2 (to align then score) or --sam (to score an existing BAM)")
+    if not has_fasta or not has_gtf:
+        _die("--fasta and --gtf are required (for TSJS scoring, and to auto-build the index if --gsnap_idx is missing)")
+
+    # Shape A: mates -> run a full GSNAP alignment, write <prefix>_gsnap.bam,
+    # then hand that BAM off to the same TSJS scoring code that --sam users hit.
+    # This guarantees a BAM produced by us and a BAM produced externally go
+    # through identical transformer scoring.
+    if has_mates:
+        if not has_index:
+            args.gsnap_idx = os.path.join(args.out, "gsnap_idx")
+            os.makedirs(args.gsnap_idx, exist_ok=True)
+            gsnap_indexing_log = os.path.join(args.out, "gsnap_indexing_log.txt")
+            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[LOG]\tBuilding GSNAP TGGA index '{args.gsnap_idx}'")
+            run_gsnap_index(
+                anno_gtf=args.gtf,
+                genome_fasta=args.fasta,
+                gsnap_index=args.gsnap_idx,
+                gsnap_idx_flags=args.gsnap_idx_flags,
+                log_file=gsnap_indexing_log,
+            )
+
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\t[INFO]\tRunning GSNAP alignment (mode=GSNAP+TSJS)")
+        gsnap_aligning_log = os.path.join(args.out, args.prefix + "_gsnap_aligning_log.txt")
+        gsnap_bam = os.path.join(args.out, args.prefix + "_gsnap.bam")
+        gsnap_tmp = os.path.join(args.out, args.prefix + "_gsnap_tmp/")
+        os.makedirs(gsnap_tmp, exist_ok=True)
+
+        run_gsnap_alignment(
+            gsnap_aln_flags=args.gsnap_aln_flags,
+            threads=args.threads,
+            gsnap_index=args.gsnap_idx,
+            gsnap_idx_flags=args.gsnap_idx_flags,
+            mate_1=args.mate_1,
+            mate_2=args.mate_2,
+            sm_view_flags="",
+            sam_sort_flags=args.sam_sort_flags,
+            output_bam=gsnap_bam,
+            output_prefix=gsnap_tmp,
+            log_file=gsnap_aligning_log,
+            gsnap_accel_flags=_build_gsnap_accel_flags(args),
+        )
+
+        # Hand the freshly-aligned BAM off to the TSJS scoring block below.
+        # We do NOT exit here -- Shape B's code path runs next on this BAM,
+        # which is identical to what a --sam user would get.
+        args.sam = gsnap_bam
+
+    # Shape B: --sam given (either by user or by Shape A above) -> run TSJS on
+    # the BAM. Same code path regardless of how the BAM was produced.
     
     # Collecting input
     if os.path.isfile(args.sam):
@@ -2169,6 +2013,4 @@ if __name__ == '__main__':
             add_reads_scores_to_sam(sam_file, args.out, args.prefix, args.samtools, dataset_path, n_reads=args.n_reads, method="Add")
     
 
-    if clean_up:
-        shutil.rmtree(args.model_path)
-    print("[{}]\t[LOG]\tFinished successfuly".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+    print("[{}]\t[LOG]\tFinished successfully".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
