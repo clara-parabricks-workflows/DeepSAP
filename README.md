@@ -6,7 +6,7 @@ We evaluated the performance of DeepSAP in our *Genome Biology* article: [***Dee
 
 <img src="manuscript_data_code/figures_plots_and_data/Figure_3/Figure_3_a_Baruzzo_spirder_recalls_vs_precision.png" width="1000">
 
-For additional resources — data, detailed analyses, and other supplementary materials accompanying the **DeepSAP** article — see [`manuscript_data_code/README.md`](manuscript_data_code/README.md) in this repository, or browse the [DeepSAP GitHub repository](https://github.com/clara-parabricks-workflows/DeepSAP/tree/main).
+For additional resources — data, detailed analyses, and supplementary materials accompanying the **DeepSAP** article — see [`manuscript_data_code/README.md`](manuscript_data_code/README.md) in this repository.
 <br>
 
 ## Table of Contents
