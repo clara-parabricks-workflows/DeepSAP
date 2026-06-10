@@ -2,11 +2,17 @@
 
 **DeepSAP** is a transformer-based workflow designed to enhance splice junction detection in RNA-seq data. By default, DeepSAP utilizes a highly sensitive GPU-accelerated GSNAP TGGA aligner for FASTQ inputs. Alternatively, it can also score pre-aligned BAM files directly — either from GSNAP itself or from any other aligner whose SAM records carry the `XA` (alternative alignments) tag. <br>
 
+<!-- INTERNAL_README_START
+We evaluated the performance of DeepSAP in our *Genome Biology* article: [***DeepSAP: improved RNA-seq alignment by integrating transcriptome guidance with transformer-based splice junction scoring***](https://doi.org/10.1186/s13059-026-04100-3) (Berakdar, Wu, Zhu, Samadi, Vats, 2026). In our benchmark, DeepSAP demonstrated strong performance, achieving consistently outstanding results across all evaluated metrics using Baruzzo et al. datasets. For additional resources, including data, detailed analyses, and other supplementary materials accompanying the **DeepSAP** article, please refer to the [DeepSAP GitHub repository](https://github.com/clara-parabricks-workflows/DeepSAP/tree/main).
+INTERNAL_README_END -->
+
+<!-- PUBLIC_GITHUB_README_START -->
 We evaluated the performance of DeepSAP in our *Genome Biology* article: [***DeepSAP: improved RNA-seq alignment by integrating transcriptome guidance with transformer-based splice junction scoring***](https://doi.org/10.1186/s13059-026-04100-3) (Berakdar, Wu, Zhu, Samadi, Vats, 2026). In our benchmark, DeepSAP demonstrated strong performance, achieving consistently outstanding results across all evaluated metrics using Baruzzo et al. datasets.<br>
 
 <img src="manuscript_data_code/figures_plots_and_data/Figure_3/Figure_3_a_Baruzzo_spirder_recalls_vs_precision.png" width="1000">
 
 For additional resources, including data, detailed analyses, and supplementary materials accompanying the **DeepSAP** article, please refer to [`manuscript_data_code/README.md`](manuscript_data_code/README.md) in this repository.
+<!-- PUBLIC_GITHUB_README_END -->
 
 For questions, bug reports, or other DeepSAP support requests, please use the [Parabricks developer forum](https://forums.developer.nvidia.com/c/healthcare/parabricks/).
 <br>
@@ -357,4 +363,4 @@ Signal  Forward  Reverse  Percentage
 * Initial release.
 
 ## License/Terms of Use
-By pulling and using the Parabricks container, you accept the governing terms: The software and materials are governed by the NVIDIA Software License Agreement (found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and the Product-Specific Terms for NVIDIA AI Products (found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/); except for the model which is governed by the NVIDIA Models Community License Agreement(found at NVIDIA Community Model License). ADDITIONAL INFORMATION: Apache 2.0.
+By pulling and using the Parabricks DeepSAP container, you accept the governing terms: The software and materials are governed by the NVIDIA Software License Agreement (found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and the Product-Specific Terms for NVIDIA AI Products (found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/); except for the model which is governed by the NVIDIA Models Community License Agreement(found at NVIDIA Community Model License). ADDITIONAL INFORMATION: Apache 2.0.
