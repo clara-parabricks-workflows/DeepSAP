@@ -7,12 +7,12 @@ We evaluated the performance of DeepSAP in our *Genome Biology* article: [***Dee
 INTERNAL_README_END -->
 
 <!-- PUBLIC_GITHUB_README_START -->
-We evaluated the performance of DeepSAP in our *Genome Biology* article: [***DeepSAP: improved RNA-seq alignment by integrating transcriptome guidance with transformer-based splice junction scoring***](https://doi.org/10.1186/s13059-026-04100-3) (Berakdar, Wu, Zhu, Samadi, Vats, 2026). In our benchmark, DeepSAP demonstrated strong performance, achieving consistently outstanding results across all evaluated metrics using Baruzzo et al. datasets.<br>
+We evaluated the performance of DeepSAP in our *Genome Biology* article: [***DeepSAP: improved RNA-seq alignment by integrating transcriptome guidance with transformer-based splice junction scoring***](https://doi.org/10.1186/s13059-026-04100-3) (Berakdar, Wu, Zhu, Samadi, Vats, 2026). In our benchmark, DeepSAP demonstrated strong performance, achieving consistently outstanding results across all evaluated metrics using Baruzzo et al. datasets.
+<br>
 
 <img src="manuscript_data_code/figures_plots_and_data/Figure_3/Figure_3_a_Baruzzo_spirder_recalls_vs_precision.png" width="1000">
 
-For additional resources, including data, detailed analyses, and supplementary materials accompanying the **DeepSAP** article, please refer to [`manuscript_data_code/README.md`](manuscript_data_code/README.md) in this repository.
-<!-- PUBLIC_GITHUB_README_END -->
+For additional resources, including data, detailed analyses, and supplementary materials accompanying the **DeepSAP** article, please refer to [`manuscript_data_code/README.md`](manuscript_data_code/README.md) in this repository.<!-- PUBLIC_GITHUB_README_END -->
 
 For questions, bug reports, or other DeepSAP support requests, please use the [Parabricks developer forum](https://forums.developer.nvidia.com/c/healthcare/parabricks/).
 <br>
@@ -20,6 +20,7 @@ For questions, bug reports, or other DeepSAP support requests, please use the [P
 ## Table of Contents
 - [Requirements](#requirements)
 - [Usage](#usage)
+  - [Least-privilege container execution](#least-privilege-container-execution)
 - [Pipeline Modes](#pipeline-modes)
 - [Command-line Arguments](#command-line-arguments)
 - [Version History](#version-history)
@@ -67,12 +68,19 @@ GPU memory here is dominated by two parameters:
 ## Usage
 This guide demonstrates how to quickly test DeepSAP's functionality using the **`malaria_short_pe`** dataset. Follow these steps to set up your environment and run DeepSAP:
 
+### Least-privilege container execution
+
+For production runs, mount only the input, index, and output directories that DeepSAP needs. Keep reference data, FASTQ/BAM inputs, and reusable indexes read-only; use a separate writable output directory for results.
+
 ### Step 1: Prepare Environment and Download Test Data
 This step downloads the latest DeepSAP Docker container and all required reference files and test sequencing data.
 
 ```bash
 # Pull the DeepSAP Parabricks Docker image
 docker pull nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest
+
+# Create writable result directories as the invoking host user
+mkdir -p test/outputdir test/results/prebuilt test/results/rescored
 
 # Download reference genome and annotation files
 wget -P test/malaria_short_pe/ https://raw.githubusercontent.com/clara-parabricks-workflows/DeepSAP/main/test/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf
@@ -89,15 +97,16 @@ This command builds a standalone, reusable GSNAP TGGA index from the FASTA + GTF
 ```bash
 # Build a reusable GSNAP index from the malaria reference
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir:/outputdir:rw"                                  \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
     --mode index                                                                    \
     --out /outputdir/                                                               \
     --prefix malaria_idx                                                            \
     --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
-# -> /outputdir/malaria_idx/
 ```
 
 ### Step 3: Run DeepSAP End-to-End (auto-build index, `--mode GSNAP+TSJS`)
@@ -106,8 +115,10 @@ This command executes the full DeepSAP pipeline (GSNAP alignment + transformer s
 ```bash
 # Run DeepSAP end-to-end (GSNAP index will be auto-generated)
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir:/outputdir:rw"                                  \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
     --mode GSNAP+TSJS                                                               \
     --out /outputdir/                                                               \
@@ -119,13 +130,16 @@ docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm            
 ```
 
 ### Step 4: Run DeepSAP with a Pre-existing GSNAP Index (`--mode GSNAP+TSJS` + `--gsnap_idx`)
-If you have already generated a GSNAP index (e.g., from Step 2, a previous DeepSAP run, or shared infrastructure), point DeepSAP at it via `--gsnap_idx`. This takes the fast single-pass streaming path: GSNAP alignment output is piped directly into the TSJS scoring stage without writing an intermediate BAM.
+If you have already generated a GSNAP index (e.g., from Step 2, a previous DeepSAP run, or shared infrastructure), point DeepSAP at it via `--gsnap_idx`. This skips index construction, runs the same GSNAP alignment pipeline as an auto-indexed run, writes `<prefix>_gsnap.bam`, and then applies TSJS scoring to that BAM.
 
 ```bash
 # Run DeepSAP using the index built in Step 2
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir/malaria_idx:/gsnap_idx:ro"                      \
+    --volume "$(pwd)/test/results/prebuilt:/outputdir:rw"                           \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
     --mode GSNAP+TSJS                                                               \
     --out /outputdir/                                                               \
@@ -134,7 +148,7 @@ docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm            
     --mate_2 /workdir/malaria_short_pe/SRR14793977_10K_2.fastq.gz                   \
     --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa\
-    --gsnap_idx /outputdir/malaria_idx/
+    --gsnap_idx /gsnap_idx/
 ```
 
 ### Step 5: Score an Existing BAM with TSJS Only (`--mode GSNAP+TSJS` + `--sam`)
@@ -143,13 +157,16 @@ If you already have a GSNAP-aligned BAM (e.g., from a prior GSNAP alignment run,
 ```bash
 # Score a pre-aligned BAM (no GSNAP step)
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir/test_run_10K_gsnap.bam:/input.bam:ro"           \
+    --volume "$(pwd)/test/results/rescored:/outputdir:rw"                           \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
     --mode GSNAP+TSJS                                                               \
     --out /outputdir/                                                               \
     --prefix test_run_10K_rescored                                                  \
-    --sam /outputdir/test_run_10K_gsnap.bam                                         \
+    --sam /input.bam                                                                \
     --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
 ```
@@ -159,43 +176,56 @@ docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm            
 <!-- ```bash
 # Run DeepSAP with the test dataset and pre-generated GSNAP index
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
-    nvcr.io/eeatisidcqzm/clara-parabricks-deepsap:v0.0.3                            \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir/malaria_idx:/gsnap_idx:ro"                      \
+    --volume "$(pwd)/test/results/prebuilt:/outputdir:rw"                           \
+    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
+    --mode GSNAP+TSJS                                                               \
     --out /outputdir/                                                               \
     --prefix test_run_10K                                                           \
     --mate_1 /workdir/malaria_short_pe/SRR14793977_10K_1.fastq.gz                   \
     --mate_2 /workdir/malaria_short_pe/SRR14793977_10K_2.fastq.gz                   \
     --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa\
-    --gsnap_idx /outputdir/gsnap_idx/
+    --gsnap_idx /gsnap_idx/
 
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
-    nvcr.io/eeatisidcqzm/clara-parabricks-deepsap:v0.0.3                            \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir:/outputdir:rw"                                  \
+    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
+    --mode GSNAP+TSJS                                                               \
     --out /outputdir/                                                               \
     --prefix test_run_human_ERG                                                     \
-    --gtf /workdir/human_ERG_short_pe/chromosome_21.gtf          \
-    --fasta /workdir/human_ERG_short_pe/chromosome_21.fa \
+    --gtf /workdir/human_ERG_short_pe/chromosome_21.gtf                             \
+    --fasta /workdir/human_ERG_short_pe/chromosome_21.fa                            \
     --sam /workdir/human_ERG_short_pe/ERG_novel_sj.sam
 
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
-    nvcr.io/eeatisidcqzm/clara-parabricks-deepsap:v0.0.3                            \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir:/outputdir:rw"                                  \
+    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
+    --mode GSNAP+TSJS                                                               \
     --out /outputdir/                                                               \
-    --prefix test_run_danio                                                     \
-    --gtf /workdir/zebra_fish_short_pe/GCF_000002035.6_GRCz11_genomic.gtf          \
-    --fasta /workdir/zebra_fish_short_pe/GCF_000002035.6_GRCz11_genomic.fna \
-    --mate_1 /workdir/zebra_fish_short_pe/SRR14793977_10K_1.fastq.gz                   \
+    --prefix test_run_danio                                                         \
+    --gtf /workdir/zebra_fish_short_pe/GCF_000002035.6_GRCz11_genomic.gtf           \
+    --fasta /workdir/zebra_fish_short_pe/GCF_000002035.6_GRCz11_genomic.fna         \
+    --mate_1 /workdir/zebra_fish_short_pe/SRR14793977_10K_1.fastq.gz                \
     --mate_2 /workdir/zebra_fish_short_pe/SRR14793977_10K_2.fastq.gz
 
 
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
-    nvcr.io/eeatisidcqzm/clara-parabricks-deepsap:v0.0.3                            \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir:/outputdir:rw"                                  \
+    nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
+    --mode GSNAP+TSJS                                                               \
     --out /outputdir/                                                               \
     --prefix test_run_human_genecode                                                \
     --gtf /workdir/human_genecode_short_pe/gencode.v48.annotation.gtf               \
@@ -218,28 +248,32 @@ DeepSAP's `--mode` flag selects which pipeline mode to run. The default `GSNAP+T
 
 ```bash
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir:/outputdir:rw"                                  \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
     --mode index                                                                    \
     --out /outputdir/                                                               \
     --prefix malaria_idx                                                            \
     --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
-# -> /outputdir/malaria_idx/
 ```
 
 ### Mode 2: Score an existing BAM with TSJS only
 
 ```bash
 docker run --gpus 1 --ulimit memlock=-1 --ulimit stack=67108864 --rm                \
-    --volume $(pwd)/test:/workdir                                                   \
-    --volume $(pwd)/test/outputdir:/outputdir                                       \
+    --user "$(id -u):$(id -g)"                                                      \
+    --cap-drop=ALL --security-opt=no-new-privileges                                 \
+    --volume "$(pwd)/test:/workdir:ro"                                              \
+    --volume "$(pwd)/test/outputdir/test_run_10K_gsnap.bam:/input.bam:ro"           \
+    --volume "$(pwd)/test/results/rescored:/outputdir:rw"                           \
     nvcr.io/nvidia/clara/clara-parabricks-deepsap:latest                            \
     --mode GSNAP+TSJS                                                               \
     --out /outputdir/                                                               \
     --prefix test_run_10K_rescored                                                  \
-    --sam /outputdir/test_run_10K_gsnap.bam                                         \
+    --sam /input.bam                                                                \
     --gtf /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.60.gtf           \
     --fasta /workdir/malaria_short_pe/Plasmodium_falciparum.ASM276v2.dna.toplevel.fa
 # -> /outputdir/test_run_10K_rescored.bam (TSJS-scored)
@@ -338,6 +372,7 @@ Signal  Forward  Reverse  Percentage
 | `--gsnap_aln_flags` | Extra flags passed to `gsnap` at alignment time. See [GSNAP accelerated parameters](#gsnap-accelerated-parameters) below for GPU-acceleration knobs you can wire in here. | No             | `--gunzip -A sam --novelsplicing 1` |
 | `-c, --config`    | Config `.json` file to control DeepSAP internal parameters                                           | No             | `/scripts/parameters_config.json` |
 | `--batch`         | Number of candidate splice junctions scored per transformer forward pass. Larger values raise throughput but increase GPU memory use (see [Requirements](#requirements) for a memory-vs-batch reference). | No             | `2048` |
+| `--score_method`  | Scoring method applied to junctions and reads: `Add` or `Multiply`                                      | No             | `Add` |
 | `--no-fp16`       | Don't use fp16 half-precision floating-point                                                         | No             | fp16 enabled |
 | `--set_size`      | Set size to split datasets for inference                                                             | No             | `102400` (= 1024 × 100) |
 | `-t, --threads`   | Number of threads                                                                                    | No             | host `os.cpu_count()` |
@@ -349,7 +384,7 @@ Signal  Forward  Reverse  Percentage
 
 ## Version History
 ### v0.1.0
-* Added GPU-accelerated GSNAP. The runtime image now ships a CUDA-accelerated GSNAP build with both Stage-1 (r2d) and Stage-2 (localdb) running on the GPU by default; tunable passthrough knobs are exposed via `--localdb-batch`, `--localdb-scratch`, and `--batch-nreads` (see [Command-line Arguments](#command-line-arguments)).
+* Added GPU-accelerated GSNAP v2025-04-19. The runtime image now ships a CUDA-accelerated GSNAP build with both Stage-1 (r2d) and Stage-2 (localdb) running on the GPU by default; tunable passthrough knobs are exposed via `--localdb-batch`, `--localdb-scratch`, and `--batch-nreads` (see [Command-line Arguments](#command-line-arguments)).
 * Added `--mode` flag to explicitly select pipeline mode (`index`, `GSNAP+TSJS`). The default `GSNAP+TSJS` preserves the v0.0.x end-to-end behaviour, including auto-building a GSNAP index when `--gsnap_idx` is omitted.
 * Bug fix: output BAM is now correctly suffixed with `.bam`.
 * Bug fix: SAM records with empty CIGAR strings are now normalised to `*` before being written to the BAM stream.
