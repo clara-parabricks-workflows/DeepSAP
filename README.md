@@ -20,7 +20,6 @@ For questions, bug reports, or other DeepSAP support requests, please use the [P
 ## Table of Contents
 - [Requirements](#requirements)
 - [Usage](#usage)
-  - [Least-privilege container execution](#least-privilege-container-execution)
 - [Pipeline Modes](#pipeline-modes)
 - [Command-line Arguments](#command-line-arguments)
 - [Version History](#version-history)
